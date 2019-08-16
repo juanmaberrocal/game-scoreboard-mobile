@@ -4,28 +4,54 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:http/http.dart' as http;
+
+Future ping() async {
+  final response =
+      await http.get(
+        'http://localhost:3000/ping',
+      );
+
+
+  if (response.statusCode == 200) {
+    // If server returns an OK response, parse the JSON.
+    return true;
+  } else {
+    // If that response was not OK, throw an error.
+    throw Exception('Failed to load post');
+  }
+}
+
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() =>  _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final int splashDuration = 2;
+  final int retryLimit = 5;
+  int retryCount = 0;
 
-  startTime() async {
-    return Timer(
-        Duration(seconds: splashDuration),
-            () {
-          SystemChannels.textInput.invokeMethod('TextInput.hide');
-          // Navigator.of(context).pushReplacementNamed('/LoginScreen');
-        }
-    );
+  loadApi() {
+    ping().then((resp) {
+      print("nailed it");
+    }).catchError((err) {
+      retryCount++;
+
+      if (retryCount < retryLimit) {
+        print(retryCount);
+        print("try again");
+        loadApi();
+      } else {
+        print("failed");
+        throw Exception('Failed to load post');
+      }
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    startTime();
+    loadApi();
   }
 
   @override
