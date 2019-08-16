@@ -1,4 +1,4 @@
-# game_scoreboard_ui
+# Game Scoreboard
 
 A new Flutter project.
 
