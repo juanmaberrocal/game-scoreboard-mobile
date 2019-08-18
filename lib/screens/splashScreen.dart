@@ -14,11 +14,10 @@ Future ping() async {
 
 
   if (response.statusCode == 200) {
-    // If server returns an OK response, parse the JSON.
     return true;
   } else {
     // If that response was not OK, throw an error.
-    throw Exception('Failed to load post');
+    throw Exception('API Failed to Respond');
   }
 }
 
@@ -28,22 +27,23 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final int retryDuration = 2;
   final int retryLimit = 5;
   int retryCount = 0;
 
   loadApi() {
     ping().then((resp) {
-      print("nailed it");
+      Navigator.of(context).pushReplacementNamed('/login');
     }).catchError((err) {
       retryCount++;
 
       if (retryCount < retryLimit) {
-        print(retryCount);
-        print("try again");
-        loadApi();
+        Timer(
+          Duration(seconds: retryDuration),
+          () { loadApi(); }
+        );
       } else {
-        print("failed");
-        throw Exception('Failed to load post');
+        throw Exception('API Failed to Respond');
       }
     });
   }
