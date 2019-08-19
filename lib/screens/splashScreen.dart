@@ -1,29 +1,12 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-import 'package:http/http.dart' as http;
-
-Future ping() async {
-  final response =
-      await http.get(
-        'http://localhost:3000/ping',
-      );
-
-
-  if (response.statusCode == 200) {
-    return true;
-  } else {
-    // If that response was not OK, throw an error.
-    throw Exception('API Failed to Respond');
-  }
-}
+import 'package:game_scoreboard/data/storedUser.dart';
+import 'package:game_scoreboard/services/systemServices.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
-  _SplashScreenState createState() =>  _SplashScreenState();
+  _SplashScreenState createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
@@ -31,18 +14,27 @@ class _SplashScreenState extends State<SplashScreen> {
   final int retryLimit = 5;
   int retryCount = 0;
 
-  loadApi() {
-    ping().then((resp) {
-      Navigator.of(context).pushReplacementNamed('/login');
+  void _loadApi() {
+    // ensure api is awake
+    SystemServices.ping().then((resp) {
+      // check if user has already logged in
+      // redirect to login or dashboard depending on token
+      StoredUser.getToken().then((token) {
+        String route = (token == null) ? '/login' : '/dashboard';
+        Navigator.of(context).pushReplacementNamed(route);
+      });
     }).catchError((err) {
+      // if api is not awake
+      // retry pin {retryLimit} amount of times
       retryCount++;
 
       if (retryCount < retryLimit) {
         Timer(
           Duration(seconds: retryDuration),
-          () { loadApi(); }
+          () { _loadApi(); }
         );
       } else {
+        // if ping response never returns raise error
         throw Exception('API Failed to Respond');
       }
     });
@@ -51,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    loadApi();
+    _loadApi();
   }
 
   @override
