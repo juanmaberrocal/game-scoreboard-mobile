@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatefulWidget {
   @override
-  _DashboardScreenState createState() =>  _DashboardScreenState();
+  _DashboardScreenState createState() => _DashboardScreenState();
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
@@ -10,9 +10,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text("Game Scoreboard"),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.exit_to_app),
+            tooltip: 'Log Out',
+            onPressed: () {
+              // todo: logout function
+            },
+          ),
+        ],
+      ),
       body: Center(
         child: Text("Dashboard!"),
-      )
+      ),
     );
   }
 }
