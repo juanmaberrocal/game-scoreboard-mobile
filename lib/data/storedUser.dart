@@ -6,6 +6,6 @@ abstract class StoredUser {
 
   static Future<String> getToken() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(authToken) ?? '';
+    return prefs.getString(authToken) ?? null;
   }
 }
