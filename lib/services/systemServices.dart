@@ -2,11 +2,10 @@ import 'package:http/http.dart' as http;
 
 abstract class SystemServices {
   static String apiRoot = 'http://localhost:3000/';
-  static String apiV1Root = '${apiRoot}v1/';
-  static String apiV2Root = '${apiRoot}v2/';
 
   static Future<bool> ping() async {
-    final response = await http.get('${apiRoot}ping');
+    final apiPing = '${apiRoot}ping';
+    final response = await http.get(apiPing);
 
     if (response.statusCode == 200) {
       return true;

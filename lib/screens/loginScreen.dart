@@ -1,30 +1,47 @@
 import 'package:flutter/material.dart';
 
+import 'package:game_scoreboard/services/authorizationServices.dart';
+
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() =>  _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  // Create a text controller and use it to retrieve the current value
+  // of the TextFields.
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  final TextStyle style = TextStyle(fontSize: 20.0);
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final emailField = TextField(
+      controller: emailController,
       obscureText: false,
-      // style: style,
+      style: style,
       decoration: InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-          hintText: "Email",
-          border:
-              OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        hintText: "Email",
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
     );
     final passwordField = TextField(
+      controller: passwordController,
       obscureText: true,
-      // style: style,
+      style: style,
       decoration: InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-          hintText: "Password",
-          border:
-              OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        hintText: "Password",
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
     );
     final loginButon = Material(
       elevation: 5.0,
@@ -33,11 +50,28 @@ class _LoginScreenState extends State<LoginScreen> {
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        onPressed: () {},
+        onPressed: () {
+          AuthorizationServices.logIn(
+            emailController.text,
+            passwordController.text
+          ).then((void player) {
+            // if sign in successful navigate to dashboard
+            Navigator.of(context).pushReplacementNamed('/dashboard');
+          }).catchError((err) {
+            // if sign in failed display error message
+            return showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  content: Text(err.toString()),
+                );
+              },
+            );
+          });
+        },
         child: Text("Login",
-            textAlign: TextAlign.center,
-            // style: style.copyWith(
-            //     color: Colors.white, fontWeight: FontWeight.bold)
+          textAlign: TextAlign.center,
+          style: style.copyWith(color: Colors.white, fontWeight: FontWeight.bold)
         ),
       ),
     );
@@ -59,9 +93,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     fit: BoxFit.contain,
                   ),
                 ),
-                SizedBox(height: 45.0),
+                SizedBox(
+                  height: 45.0
+                ),
                 emailField,
-                SizedBox(height: 25.0),
+                SizedBox(
+                  height: 25.0
+                ),
                 passwordField,
                 SizedBox(
                   height: 35.0,
