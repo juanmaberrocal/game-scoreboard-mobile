@@ -1,7 +1,13 @@
+// flutter
 import 'package:flutter/material.dart';
+// dependencies
+import 'package:provider/provider.dart';
+// app
+import 'package:game_scoreboard/models/currentPlayer.dart';
 
-import 'package:game_scoreboard/services/authorizationServices.dart';
-
+/*
+Screen: Login
+*/
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() =>  _LoginScreenState();
@@ -51,19 +57,22 @@ class _LoginScreenState extends State<LoginScreen> {
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
-          AuthorizationServices.logIn(
+          Provider.of<CurrentPlayer>(context).logIn(
             emailController.text,
-            passwordController.text
-          ).then((void player) {
+            passwordController.text,
+          ).then((void _) {
             // if sign in successful navigate to dashboard
             Navigator.of(context).pushReplacementNamed('/dashboard');
           }).catchError((err) {
             // if sign in failed display error message
+            final String errorString = err.toString();
+            final String errorMessage = errorString.replaceAll('Exception: ', '');
+
             return showDialog(
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  content: Text(err.toString()),
+                  content: Text('Could Not Sign In Player:\n$errorString'),
                 );
               },
             );

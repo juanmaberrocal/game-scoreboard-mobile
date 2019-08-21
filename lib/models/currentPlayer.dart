@@ -1,32 +1,66 @@
-import 'package:game_scoreboard/models/player.dart';
+// flutter
+import 'dart:async';
+import 'package:flutter/foundation.dart';
+// dependencies
+// app
 import 'package:game_scoreboard/data/storedUser.dart';
+import 'package:game_scoreboard/models/player.dart';
+import 'package:game_scoreboard/services/authorizationServices.dart';
 
-class CurrentPlayer extends Player {
-  final int id;
-  final String email;
-  final String first_name;
-  final String last_name;
-  final String nickname;
+enum Status { Uninitialized, Authenticated, Authenticating, Unauthenticated }
 
-  CurrentPlayer({
-    this.id, this.email, this.first_name, this.last_name, this.nickname,
-  }) : super();
+/*
+Class: CurrentPlayer
+*/
+class CurrentPlayer with ChangeNotifier {
+  Player player;
+  Status _status = Status.Uninitialized;
 
-  factory CurrentPlayer.fromJson(Map<String, dynamic> json, String token) {
+  void _setCurrentUser(String token, Player player) {
     StoredUser.setToken(token);
-
-    return CurrentPlayer(
-      id: json['id'],
-      email: json['email'],
-      first_name: json['first_name'],
-      last_name: json['last_name'],
-      nickname: json['nickname'],
-    );
+    _status = Status.Authenticated;
+    player = player;
+    notifyListeners();
   }
 
-  /* @override
-  void dispose() {
+  void _clearCurrentUser() {
     StoredUser.clear();
-    super.dispose();
-  } */
+    _status = Status.Unauthenticated;
+    player = null;
+    notifyListeners();
+  }
+
+  Future<void> logIn(String email, String password) async {
+    _status = Status.Authenticating;
+
+    await AuthorizationServices.logIn(
+      email,
+      password
+    ).then((Map<String, dynamic> loginResponse) {
+      // if sign in succeeded
+      // store user token and set player record
+      _setCurrentUser(
+        loginResponse['token'],
+        Player.fromJson(loginResponse['body']),
+      );
+    }).catchError((err) {
+      // if sign in failed
+      // ensure all stored data is cleared
+      _clearCurrentUser();
+      throw err;
+    });
+  }
+
+  Future<void> logOut() async {
+    _status = Status.Authenticating;
+
+    await AuthorizationServices.logOut().then((void _) {
+      _clearCurrentUser();
+    }).catchError((err) {
+      // if sign in failed
+      // ensure all stored data is cleared
+      _clearCurrentUser();
+      throw err;
+    });
+  }
 }

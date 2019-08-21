@@ -1,9 +1,14 @@
+//flutter
 import 'dart:async';
 import 'package:flutter/material.dart';
-
+// dependencies
+// app
 import 'package:game_scoreboard/data/storedUser.dart';
 import 'package:game_scoreboard/services/systemServices.dart';
 
+/*
+Screen: Splash
+*/
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -20,12 +25,12 @@ class _SplashScreenState extends State<SplashScreen> {
       // check if user has already logged in
       // redirect to login or dashboard depending on token
       StoredUser.getToken().then((token) {
-        String route = (token == null) ? '/login' : '/dashboard';
+        String route = (token == null) ? '/login' : '/login';
         Navigator.of(context).pushReplacementNamed(route);
       });
     }).catchError((err) {
       // if api is not awake
-      // retry pin {retryLimit} amount of times
+      // retry ping {retryLimit} amount of times
       retryCount++;
 
       if (retryCount < retryLimit) {

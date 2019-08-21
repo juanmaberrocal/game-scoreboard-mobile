@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+
+import 'package:game_scoreboard/models/currentPlayer.dart';
+
 import 'package:game_scoreboard/screens/splashScreen.dart';
 import 'package:game_scoreboard/screens/loginScreen.dart';
 import 'package:game_scoreboard/screens/dashboardScreen.dart';
 
-void main() => runApp(GameScoreboard());
+void main() => runApp(
+  ChangeNotifierProvider(
+    builder: (_) => CurrentPlayer(),
+    child: GameScoreboard(),
+  ),
+);
 
 class GameScoreboard extends StatelessWidget {
   // This widget is the root of your application.

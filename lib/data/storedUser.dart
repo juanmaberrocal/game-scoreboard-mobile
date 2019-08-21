@@ -1,6 +1,11 @@
+// flutter
 import 'dart:async';
+// dependencies
 import 'package:shared_preferences/shared_preferences.dart';
 
+/*
+Service: StoredUser
+*/
 abstract class StoredUser {
   static String authToken = 'auth_token';
 
