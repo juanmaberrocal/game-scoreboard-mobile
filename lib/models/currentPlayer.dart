@@ -16,10 +16,10 @@ class CurrentPlayer with ChangeNotifier {
   Player player;
   Status _status = Status.Uninitialized;
 
-  void _setCurrentUser(String token, Player player) {
+  void _setCurrentUser(String token, Player _player) {
     StoredUser.setToken(token);
     _status = Status.Authenticated;
-    player = player;
+    player = _player;
     notifyListeners();
   }
 

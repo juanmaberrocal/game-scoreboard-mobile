@@ -25,7 +25,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             icon: const Icon(Icons.exit_to_app),
             tooltip: 'Log Out',
             onPressed: () {
-              Provider.of<CurrentPlayer>(context).logOut().then((void _) {
+              Provider.of<CurrentPlayer>(context, listen: false).logOut().then((void _) {
                 // if sign out successful navigate to login
                 Navigator.of(context).pushReplacementNamed('/login');
               }).catchError((err) {
@@ -40,7 +40,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         // child: Text("Dashboard!"),
         child: Consumer<CurrentPlayer>(
           builder: (context, currentPlayer, child) {
-            return Text('Total price: ${currentPlayer.player.email}');
+            return Text('Total price: ${currentPlayer.player?.email}');
           },
         ),
       ),

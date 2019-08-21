@@ -57,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
-          Provider.of<CurrentPlayer>(context).logIn(
+          Provider.of<CurrentPlayer>(context, listen: false).logIn(
             emailController.text,
             passwordController.text,
           ).then((void _) {
@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  content: Text('Could Not Sign In Player:\n$errorString'),
+                  content: Text('Could Not Sign In Player:\n$errorMessage'),
                 );
               },
             );

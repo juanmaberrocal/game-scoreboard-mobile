@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
       // check if user has already logged in
       // redirect to login or dashboard depending on token
       StoredUser.getToken().then((token) {
-        String route = (token == null) ? '/login' : '/login';
+        String route = (token == null) ? '/login' : '/dashboard';
         Navigator.of(context).pushReplacementNamed(route);
       });
     }).catchError((err) {

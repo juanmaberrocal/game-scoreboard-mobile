@@ -3,6 +3,7 @@ import 'dart:convert';
 // dependencies
 import 'package:http/http.dart' as http;
 // app
+import 'package:game_scoreboard/services/apiServices.dart';
 
 /*
 Service: Authorization
@@ -11,21 +12,21 @@ abstract class AuthorizationServices {
   static String apiRoot = 'http://localhost:3000/';
 
   static Future<Map<String, dynamic>> logIn(String email, String password) async {
-    final String apiLogin = '${apiRoot}login';
-    final Map<String, String> apiHeaders = { 'Accept': 'application/json', 'Content-Type': 'application/json' };
-    final String apiBody = json.encode({
+    final String apiUrl = 'login';
+    final Map<String, dynamic> apiBody = {
       'player': {
         'email': email,
         'password': password,
       },
-    });
+    };
 
-    final response = await http.post(
-      apiLogin,
-      headers: apiHeaders,
-      body: apiBody,
+    // post login request
+    final response = await ApiServices.post(
+      apiUrl,
+      apiBody: apiBody
     );
 
+    // parse json response
     final Map<String, dynamic> body = json.decode(response.body);
 
     if (response.statusCode == 200) {
@@ -44,12 +45,11 @@ abstract class AuthorizationServices {
   }
 
   static Future<void> logOut() async {
-    final String apiLogout = '${apiRoot}logout';
-    final Map<String, String> apiHeaders = { 'Accept': 'application/json', 'Content-Type': 'application/json' };
-    
-    final response = await http.delete(
-      apiLogout,
-      headers: apiHeaders,
+    final String apiUrl = 'logout';
+
+    // post logout request
+    final response = await ApiServices.delete(
+      apiUrl,
     );
     
     if (response.statusCode == 204) {
