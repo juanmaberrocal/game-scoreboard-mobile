@@ -1,11 +1,17 @@
-import 'package:http/http.dart' as http;
+// flutter
+import 'dart:convert';
+// dependencies
+// app
+import 'package:game_scoreboard/services/apiServices.dart';
 
 abstract class SystemServices {
-  static String apiRoot = 'http://localhost:3000/';
-
   static Future<bool> ping() async {
-    final apiPing = '${apiRoot}ping';
-    final response = await http.get(apiPing);
+    final String apiUrl = 'ping';
+
+    // send ping request
+    final response = await ApiServices.get(
+      apiUrl,
+    );
 
     if (response.statusCode == 200) {
       return true;

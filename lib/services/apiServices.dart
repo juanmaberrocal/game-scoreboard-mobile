@@ -35,7 +35,7 @@ abstract class ApiServices {
     return body;
   }
 
-  static Future<void> get(
+  static Future<http.Response> get(
     String apiEndpoint,
     {
       Map<String, String> apiHeaders,

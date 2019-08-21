@@ -1,7 +1,6 @@
 // flutter
 import 'dart:convert';
 // dependencies
-import 'package:http/http.dart' as http;
 // app
 import 'package:game_scoreboard/services/apiServices.dart';
 
@@ -9,8 +8,6 @@ import 'package:game_scoreboard/services/apiServices.dart';
 Service: Authorization
 */
 abstract class AuthorizationServices {
-  static String apiRoot = 'http://localhost:3000/';
-
   static Future<Map<String, dynamic>> logIn(String email, String password) async {
     final String apiUrl = 'login';
     final Map<String, dynamic> apiBody = {
