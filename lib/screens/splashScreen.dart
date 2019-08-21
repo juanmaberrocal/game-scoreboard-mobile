@@ -2,9 +2,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 // dependencies
+import 'package:provider/provider.dart';
 // app
-import 'package:game_scoreboard/data/storedUser.dart';
 import 'package:game_scoreboard/services/systemServices.dart';
+import 'package:game_scoreboard/models/currentPlayer.dart';
 
 /*
 Screen: Splash
@@ -23,10 +24,10 @@ class _SplashScreenState extends State<SplashScreen> {
     // ensure api is awake
     SystemServices.ping().then((resp) {
       // check if user has already logged in
-      // redirect to login or dashboard depending on token
-      StoredUser.getToken().then((token) {
-        String route = (token == null) ? '/login' : '/dashboard';
-        Navigator.of(context).pushReplacementNamed(route);
+      // and redirect to login or dashboard
+      Provider.of<CurrentPlayer>(context, listen: false).renew().then((bool isLoggedIn) {
+        String redirectPath = isLoggedIn ? '/dashboard' : '/login';
+        Navigator.of(context).pushReplacementNamed(redirectPath);
       });
     }).catchError((err) {
       // if api is not awake

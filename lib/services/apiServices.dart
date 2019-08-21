@@ -20,7 +20,7 @@ abstract class ApiServices {
   static Future<Map<String, String>> _buildApiHeaders({
     Map<String, String> apiHeaders
   }) async {
-    Map<String, String> headers = _apiBaseHeaders;
+    Map<String, String> headers = new Map.from(_apiBaseHeaders);
     String authToken = await StoredUser.getToken();
     authToken == null ? null : headers.addAll({'Authorization': 'Bearer $authToken'});
     apiHeaders == null ? null : headers.addAll(apiHeaders);
@@ -30,7 +30,7 @@ abstract class ApiServices {
   static Map<String, dynamic> _buildBody({
     Map<String, dynamic> apiBody
   }) {
-    Map<String, dynamic> body = _apiBaseBody;
+    Map<String, dynamic> body = new Map.from(_apiBaseBody);
     apiBody == null ? null : body.addAll(apiBody);
     return body;
   }

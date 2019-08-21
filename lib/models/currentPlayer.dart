@@ -16,8 +16,16 @@ class CurrentPlayer with ChangeNotifier {
   Player player;
   Status _status = Status.Uninitialized;
 
+  void _parseResponse(Map<String, dynamic> response) {
+    _setCurrentUser(
+      response['token'],
+      Player.fromJson(response['body']),
+    );
+  }
+
   void _setCurrentUser(String token, Player _player) {
     StoredUser.setToken(token);
+
     _status = Status.Authenticated;
     player = _player;
     notifyListeners();
@@ -30,6 +38,27 @@ class CurrentPlayer with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<bool> renew() async {
+    final String token = await StoredUser.getToken();
+    bool isRenewed;
+
+    if (token == null){
+      return false;
+    }
+
+    await AuthorizationServices.renewToken().then((Map<String, dynamic> renewResponse) {
+      // store user token and set player record
+      _parseResponse(renewResponse);
+      isRenewed = true;
+    }).catchError((err) {
+      // ensure all stored data is cleared
+      _clearCurrentUser();
+      isRenewed = false;
+    });
+
+    return isRenewed;
+  }
+
   Future<void> logIn(String email, String password) async {
     _status = Status.Authenticating;
 
@@ -39,10 +68,7 @@ class CurrentPlayer with ChangeNotifier {
     ).then((Map<String, dynamic> loginResponse) {
       // if sign in succeeded
       // store user token and set player record
-      _setCurrentUser(
-        loginResponse['token'],
-        Player.fromJson(loginResponse['body']),
-      );
+      _parseResponse(loginResponse);
     }).catchError((err) {
       // if sign in failed
       // ensure all stored data is cleared
