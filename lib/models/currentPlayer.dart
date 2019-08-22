@@ -17,13 +17,20 @@ class CurrentPlayer with ChangeNotifier {
   Status _status = Status.Uninitialized;
 
   void _parseResponse(Map<String, dynamic> response) {
-    _setCurrentUser(
-      response['token'],
-      Player.fromJson(response['body']),
+    final String token = response['token'];
+    final Map<String, dynamic> data = response['body']['data'];
+
+    Map<String, dynamic> json = {};
+    json.addAll({'id': data['id']});
+    json.addAll(data['attributes']);
+
+    _setCurrentPlayer(
+      token,
+      Player.fromJson(json),
     );
   }
 
-  void _setCurrentUser(String token, Player _player) {
+  void _setCurrentPlayer(String token, Player _player) {
     StoredUser.setToken(token);
 
     _status = Status.Authenticated;
@@ -31,7 +38,7 @@ class CurrentPlayer with ChangeNotifier {
     notifyListeners();
   }
 
-  void _clearCurrentUser() {
+  void _clearCurrentPlayer() {
     StoredUser.clear();
     _status = Status.Unauthenticated;
     player = null;
@@ -52,7 +59,7 @@ class CurrentPlayer with ChangeNotifier {
       isRenewed = true;
     }).catchError((err) {
       // ensure all stored data is cleared
-      _clearCurrentUser();
+      _clearCurrentPlayer();
       isRenewed = false;
     });
 
@@ -72,7 +79,7 @@ class CurrentPlayer with ChangeNotifier {
     }).catchError((err) {
       // if sign in failed
       // ensure all stored data is cleared
-      _clearCurrentUser();
+      _clearCurrentPlayer();
       throw err;
     });
   }
@@ -81,11 +88,11 @@ class CurrentPlayer with ChangeNotifier {
     _status = Status.Authenticating;
 
     await AuthorizationServices.logOut().then((void _) {
-      _clearCurrentUser();
+      _clearCurrentPlayer();
     }).catchError((err) {
       // if sign in failed
       // ensure all stored data is cleared
-      _clearCurrentUser();
+      _clearCurrentPlayer();
       throw err;
     });
   }

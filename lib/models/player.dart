@@ -1,21 +1,32 @@
+// flutter
+// dependencies
+import 'package:json_annotation/json_annotation.dart';
+// app
+
+// serializer
+part 'player.g.dart';
+
+/*
+model: Player
+*/
+@JsonSerializable()
 class Player {
+  @JsonKey(fromJson: _stringToInt, toJson: _stringFromInt)
   final int id;
   final String email;
-  final String first_name;
-  final String last_name;
+  @JsonKey(name: 'first_name')
+  final String firstName;
+  @JsonKey(name: 'last_name')
+  final String lastName;
   final String nickname;
 
   Player({
-    this.id, this.email, this.first_name, this.last_name, this.nickname,
+    this.id, this.email, this.firstName, this.lastName, this.nickname,
   });
 
-  factory Player.fromJson(Map<String, dynamic> json) {
-    return Player(
-      id: json['id'],
-      email: json['email'],
-      first_name: json['first_name'],
-      last_name: json['last_name'],
-      nickname: json['nickname'],
-    );
-  }
+  factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);
+  Map<String, dynamic> toJson() => _$PlayerToJson(this);
+
+  static int _stringToInt(String number) => number == null ? null : int.parse(number);
+  static String _stringFromInt(int number) => number?.toString();
 }
