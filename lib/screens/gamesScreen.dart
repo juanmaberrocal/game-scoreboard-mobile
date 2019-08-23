@@ -8,12 +8,12 @@ import 'package:game_scoreboard/widgets/gameCard.dart';
 /*
 Screen: Games Dashboard
 */
-class GamesDashboardScreen extends StatefulWidget {
+class GamesScreen extends StatefulWidget {
   @override
-  _GamesDashboardScreenState createState() => _GamesDashboardScreenState();
+  _GamesScreenState createState() => _GamesScreenState();
 }
 
-class _GamesDashboardScreenState extends State<GamesDashboardScreen> {
+class _GamesScreenState extends State<GamesScreen> {
   Future<Games> _games;
 
   @override

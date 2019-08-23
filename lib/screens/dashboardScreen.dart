@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 // dependencies
 import 'package:provider/provider.dart';
 // app
-import 'package:game_scoreboard/models/currentPlayer.dart';
-import 'package:game_scoreboard/screens/gamesDashboardScreen.dart';
+import 'package:game_scoreboard/screens/gamesScreen.dart';
+import 'package:game_scoreboard/screens/homeScreen.dart';
+import 'package:game_scoreboard/screens/playersScreen.dart';
 import 'package:game_scoreboard/widgets/mainAppBar.dart';
 
 /*
@@ -47,21 +48,13 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
           controller: _tabController,
           children: [
             Center(
-              child: GamesDashboardScreen(),
+              child: GamesScreen(),
             ),
             Center(
-              child: Consumer<CurrentPlayer>(
-                builder: (context, currentPlayer, child) {
-                  return Text('Total price: ${currentPlayer.player?.nickname}');
-                },
-              ),
+              child: HomeScreen(),
             ),
             Center(
-              child: Consumer<CurrentPlayer>(
-                builder: (context, currentPlayer, child) {
-                  return Text('Total price: ${currentPlayer.player?.firstName}');
-                },
-              ),
+              child: PlayersScreen(),
             ),
           ]
         ),
