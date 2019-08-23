@@ -17,11 +17,14 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> with TickerProviderStateMixin {
   TabController _tabController;
+  final int _initialTabIndex = 1;
+  bool _displayFAB = true;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, initialIndex: 1, length: 3);
+    _tabController = TabController(vsync: this, initialIndex: _initialTabIndex, length: 3);
+    _tabController.animation.addListener(_onTabChanged);
   }
 
   @override
@@ -62,13 +65,21 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
             ),
           ]
         ),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: _displayFAB ? FloatingActionButton(
+          onPressed: () {},
           child: Icon(Icons.add),
-          onPressed: () {
-            // TODO:
-          }
-        ),
+        ) : null,
       )
     );
+  }
+
+  void _onTabChanged() {
+    final tabIndex = _tabController.index;
+    final aniValue = _tabController.animation.value;
+
+    final bool displayFAB = ((aniValue > 0.5 || aniValue < 1.5) && tabIndex == 1) ? true : false;
+    setState(() {
+      _displayFAB = displayFAB;
+    });
   }
 }
