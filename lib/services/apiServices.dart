@@ -27,6 +27,21 @@ abstract class ApiServices {
     return headers;
   }
 
+  static Uri _buildUri(
+    String apiPath,
+    {
+      Map<String, dynamic> apiQuery
+    }
+  ) {
+    Map<String, dynamic> body = new Map.from(_apiBaseBody);
+    apiQuery == null ? null : body.addAll(apiQuery);
+
+    Uri uri = Uri.parse(apiPath);
+    uri = uri.replace(queryParameters: apiQuery);
+
+    return uri;
+  }
+
   static Map<String, dynamic> _buildBody({
     Map<String, dynamic> apiBody
   }) {
@@ -39,13 +54,15 @@ abstract class ApiServices {
     String apiEndpoint,
     {
       Map<String, String> apiHeaders,
+      Map<String, dynamic> apiBody,
     }
   ) async {
-    String url = '${_apiRoot}${apiEndpoint}';
-    Map<String, String> headers = await _buildApiHeaders(apiHeaders: apiHeaders);
+    final String url = '${_apiRoot}${apiEndpoint}';
+    final Map<String, String> headers = await _buildApiHeaders(apiHeaders: apiHeaders);
+    final Uri uri = _buildUri(url, apiQuery: apiBody);
 
     return http.get(
-      url,
+      uri,
       headers: headers,
     );
   }
@@ -57,9 +74,9 @@ abstract class ApiServices {
       Map<String, dynamic> apiBody,
     }
   ) async {
-    String url = '${_apiRoot}${apiEndpoint}';
-    Map<String, String> headers = await _buildApiHeaders(apiHeaders: apiHeaders);
-    Map<String, dynamic> body = _buildBody(apiBody: apiBody);
+    final String url = '${_apiRoot}${apiEndpoint}';
+    final Map<String, String> headers = await _buildApiHeaders(apiHeaders: apiHeaders);
+    final Map<String, dynamic> body = _buildBody(apiBody: apiBody);
 
     return http.post(
       url,
@@ -72,13 +89,15 @@ abstract class ApiServices {
     String apiEndpoint,
     {
       Map<String, String> apiHeaders,
+      Map<String, dynamic> apiBody,
     }
   ) async {
-    String url = '${_apiRoot}${apiEndpoint}';
-    Map<String, String> headers = await _buildApiHeaders(apiHeaders: apiHeaders);
+    final String url = '${_apiRoot}${apiEndpoint}';
+    final Map<String, String> headers = await _buildApiHeaders(apiHeaders: apiHeaders);
+    final Uri uri = _buildUri(url, apiQuery: apiBody);
 
     return http.delete(
-      url,
+      uri,
       headers: headers,
     );
   }
