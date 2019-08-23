@@ -4,7 +4,11 @@ import 'package:flutter/material.dart';
 // app
 import 'package:game_scoreboard/helpers/colorSelector.dart';
 import 'package:game_scoreboard/models/game.dart';
+import 'package:game_scoreboard/screens/gameScreen.dart';
 
+/*
+Widget: GameCard
+*/
 Card GameCard(BuildContext context, Game game) {
   final Widget cardIcon = Center(
     child: Container(
@@ -32,16 +36,28 @@ Card GameCard(BuildContext context, Game game) {
   );
 
   return Card(
-    child: Column(
-      children: [
-        Expanded(
-          child: cardIcon,
-        ),
-        Container(
-          padding: EdgeInsets.all(8.0),
-          child: cardTitle,
-        ),
-      ]
+    child: InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => GameScreen(
+              game: game,
+            )
+          ),
+        );
+      },
+      child: Column(
+        children: [
+          Expanded(
+            child: cardIcon,
+          ),
+          Container(
+            padding: EdgeInsets.all(8.0),
+            child: cardTitle,
+          ),
+        ]
+      ),
     ),
   );
 }
