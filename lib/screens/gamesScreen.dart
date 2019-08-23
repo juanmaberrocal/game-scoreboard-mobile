@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // app
 import 'package:game_scoreboard/collections/games.dart';
 import 'package:game_scoreboard/widgets/gameCard.dart';
+import 'package:game_scoreboard/widgets/errorDisplay.dart';
 
 /*
 Screen: Games Dashboard
@@ -29,7 +30,7 @@ class _GamesScreenState extends State<GamesScreen> {
       builder: (BuildContext context, AsyncSnapshot<Games> snapshot) {
         if (snapshot.hasData) {
           final Games games = snapshot.data;
-          final List<Widget>GameCards = games.records.map(
+          final List<Widget> gameCards = games.records.map(
             (game) => GameCard(context, game)
           ).toList();
 
@@ -39,20 +40,10 @@ class _GamesScreenState extends State<GamesScreen> {
             mainAxisSpacing: 20.0,
             crossAxisSpacing: 10.0,
             crossAxisCount: 2,
-            children: GameCards,
+            children: gameCards,
           );
         } else if (snapshot.hasError) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                LayoutBuilder(builder: (context, constraint) {
-                  return Icon(Icons.error_outline, size: constraint.biggest.width/2);
-                }),
-                Text("There was an error loading the games"),
-              ],
-            ),
-          );
+          return ErrorDisplay(context, "There was an error loading the games");
         }
 
         // By default, show a loading spinner.
