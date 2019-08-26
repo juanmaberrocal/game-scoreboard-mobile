@@ -17,6 +17,12 @@ class GamesLibrary with ChangeNotifier {
   }
 
   Future<Games> load() async {
-    return _games.fetch();
+    return _games.fetch(
+      queryParams: { 'public': 'true' }
+    );
+  }
+
+  void clear() {
+    _games = Games();
   }
 }

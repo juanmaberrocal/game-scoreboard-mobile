@@ -17,6 +17,12 @@ class PlayersLibrary with ChangeNotifier {
   }
 
   Future<Players> load() async {
-    return _players.fetch();
+    return _players.fetch(
+      queryParams: { 'public': 'true' }
+    );
+  }
+
+  void clear() {
+    _players = Players();
   }
 }
