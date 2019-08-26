@@ -9,6 +9,7 @@ import 'package:game_scoreboard/models/appProviders/playersLibrary.dart';
 import 'package:game_scoreboard/screens/splashScreen.dart';
 import 'package:game_scoreboard/screens/loginScreen.dart';
 import 'package:game_scoreboard/screens/dashboardScreen.dart';
+import 'package:game_scoreboard/screens/profileScreen.dart';
 
 void main() => runApp(
   MultiProvider(
@@ -32,7 +33,8 @@ class GameScoreboard extends StatelessWidget {
       ),
       routes: {
         '/login': (context) => LoginScreen(),
-        '/dashboard': (context) => DashboardScreen()
+        '/dashboard': (context) => DashboardScreen(),
+        '/profile': (context) => ProfileScreen(),
       },
       home: SplashScreen(),
     );

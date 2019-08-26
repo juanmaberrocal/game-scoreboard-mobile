@@ -60,7 +60,7 @@ MainAppBar(context, TabController _tabController) {
       // icon: const Icon(Icons.account_box),
       tooltip: 'Profile',
       onPressed: () {
-        // TODO
+        Navigator.of(context).pushNamed('/profile');
       },
     );
   }
