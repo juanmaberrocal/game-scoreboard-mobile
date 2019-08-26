@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 // app
 import 'package:game_scoreboard/models/appProviders/gamesLibrary.dart';
 import 'package:game_scoreboard/widgets/gameCard.dart';
-import 'package:game_scoreboard/widgets/errorDisplay.dart';
 
 /*
 Screen: Games Dashboard
