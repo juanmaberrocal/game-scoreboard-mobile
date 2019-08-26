@@ -15,10 +15,12 @@ class Games {
     return _records;
   }
 
-  Future<Games> fetch() async {
+  Future<Games> fetch({
+    Map<String, dynamic> queryParams,
+  }) async {
     List<Game> games = [];
 
-    final response = await ApiServices.get(_apiPath);
+    final response = await ApiServices.get(_apiPath, apiBody: queryParams);
 
     final responseJson = json.decode(response.body);
     final responseData = responseJson['data'];
