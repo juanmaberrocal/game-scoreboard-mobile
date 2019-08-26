@@ -1,8 +1,9 @@
 // flutter
 import 'package:flutter/material.dart';
 // dependencies
+import 'package:provider/provider.dart';
 // app
-import 'package:game_scoreboard/collections/games.dart';
+import 'package:game_scoreboard/models/appProviders/gamesLibrary.dart';
 import 'package:game_scoreboard/widgets/gameCard.dart';
 import 'package:game_scoreboard/widgets/errorDisplay.dart';
 
@@ -15,39 +16,22 @@ class GamesScreen extends StatefulWidget {
 }
 
 class _GamesScreenState extends State<GamesScreen> {
-  Future<Games> _games;
-
-  @override
-  void initState() {
-    _games = Games().fetch();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Games>(
-      future: _games,
-      builder: (BuildContext context, AsyncSnapshot<Games> snapshot) {
-        if (snapshot.hasData) {
-          final Games games = snapshot.data;
-          final List<Widget> gameCards = games.records.map(
-            (game) => GameCard(context, game)
-          ).toList();
+    return Consumer<GamesLibrary>(
+      builder: (context, gamesLibrary, child) {
+        final List<Widget> gameCards = gamesLibrary.games.map(
+          (game) => GameCard(context, game)
+        ).toList();
 
-          return GridView.count(
-            primary: false,
-            padding: const EdgeInsets.all(20.0),
-            mainAxisSpacing: 20.0,
-            crossAxisSpacing: 10.0,
-            crossAxisCount: 2,
-            children: gameCards,
-          );
-        } else if (snapshot.hasError) {
-          return ErrorDisplay(context, "There was an error loading the games");
-        }
-
-        // By default, show a loading spinner.
-        return CircularProgressIndicator();
+        return GridView.count(
+          primary: false,
+          padding: const EdgeInsets.all(20.0),
+          mainAxisSpacing: 20.0,
+          crossAxisSpacing: 10.0,
+          crossAxisCount: 2,
+          children: gameCards,
+        );
       },
     );
   }
