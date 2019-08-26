@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 // dependencies
 import 'package:provider/provider.dart';
 // app
+import 'package:game_scoreboard/models/appProviders/currentPlayer.dart';
+import 'package:game_scoreboard/models/appProviders/gamesLibrary.dart';
+import 'package:game_scoreboard/models/appProviders/playersLibrary.dart';
 import 'package:game_scoreboard/services/systemServices.dart';
-import 'package:game_scoreboard/models/currentPlayer.dart';
 
 /*
 Screen: Splash
@@ -26,8 +28,17 @@ class _SplashScreenState extends State<SplashScreen> {
       // check if user has already logged in
       // and redirect to login or dashboard
       Provider.of<CurrentPlayer>(context, listen: false).renew().then((bool isLoggedIn) {
-        String redirectPath = isLoggedIn ? '/dashboard' : '/login';
-        Navigator.of(context).pushReplacementNamed(redirectPath);
+        final String redirectPath = isLoggedIn ? '/dashboard' : '/login';
+        
+        if (isLoggedIn) {
+          Provider.of<GamesLibrary>(context, listen: false).load().then((_) {
+            Provider.of<PlayersLibrary>(context, listen: false).load().then((_) {
+              Navigator.of(context).pushReplacementNamed(redirectPath);
+            });
+          });
+        } else {
+          Navigator.of(context).pushReplacementNamed(redirectPath);
+        }
       });
     }).catchError((err) {
       // if api is not awake

@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 // dependencies
 import 'package:provider/provider.dart';
 // app
-import 'package:game_scoreboard/models/currentPlayer.dart';
+import 'package:game_scoreboard/models/appProviders/currentPlayer.dart';
+import 'package:game_scoreboard/models/appProviders/gamesLibrary.dart';
+import 'package:game_scoreboard/models/appProviders/playersLibrary.dart';
 
 Future<void> _logoutConfirmDialog(BuildContext context) async {
   return showDialog<void>(
@@ -24,6 +26,9 @@ Future<void> _logoutConfirmDialog(BuildContext context) async {
             child: const Text('ACCEPT'),
             onPressed: () {
               Provider.of<CurrentPlayer>(context, listen: false).logOut().then((void _) {
+                Provider.of<PlayersLibrary>(context, listen: false).clear();
+                Provider.of<GamesLibrary>(context, listen: false).clear();
+
                 // if sign out successful navigate to login
                 Navigator.of(context).pushReplacementNamed('/login');
               }).catchError((err) {

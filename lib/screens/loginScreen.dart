@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 // dependencies
 import 'package:provider/provider.dart';
 // app
-import 'package:game_scoreboard/models/currentPlayer.dart';
+import 'package:game_scoreboard/models/appProviders/currentPlayer.dart';
+import 'package:game_scoreboard/models/appProviders/gamesLibrary.dart';
+import 'package:game_scoreboard/models/appProviders/playersLibrary.dart';
 
 /*
 Screen: Login
@@ -61,8 +63,13 @@ class _LoginScreenState extends State<LoginScreen> {
             emailController.text,
             passwordController.text,
           ).then((void _) {
-            // if sign in successful navigate to dashboard
-            Navigator.of(context).pushReplacementNamed('/dashboard');
+            // if sign in successful load necessary data
+            // and navigate to dashboard
+            Provider.of<GamesLibrary>(context, listen: false).load().then((void _) {
+              Provider.of<PlayersLibrary>(context, listen: false).load().then((void _) {
+                Navigator.of(context).pushReplacementNamed('/dashboard');
+              });
+            });
           }).catchError((err) {
             // if sign in failed display error message
             final String errorString = err.toString();
