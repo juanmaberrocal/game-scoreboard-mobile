@@ -57,7 +57,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
           final Iterable<Match> lastMatches = matches.records.take(5);
 
-
           return Container(
             padding: const EdgeInsets.all(20.0),
             child: Column(
@@ -110,7 +109,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           );
-
         } else if (snapshot.hasError) {
           print(snapshot.error);
           return ErrorDisplay(context, "There was an error loading the players");
