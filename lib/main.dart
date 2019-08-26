@@ -1,16 +1,22 @@
+// flutter
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
-
-import 'package:game_scoreboard/models/currentPlayer.dart';
-
+// dependencies
+// app
+import 'package:game_scoreboard/models/appProviders/currentPlayer.dart';
+import 'package:game_scoreboard/models/appProviders/gamesLibrary.dart';
+import 'package:game_scoreboard/models/appProviders/playersLibrary.dart';
 import 'package:game_scoreboard/screens/splashScreen.dart';
 import 'package:game_scoreboard/screens/loginScreen.dart';
 import 'package:game_scoreboard/screens/dashboardScreen.dart';
 
 void main() => runApp(
-  ChangeNotifierProvider(
-    builder: (_) => CurrentPlayer(),
+  MultiProvider(
+    providers: [
+      ChangeNotifierProvider<CurrentPlayer>(builder: (context) => CurrentPlayer()),
+      ChangeNotifierProvider<GamesLibrary>(builder: (context) => GamesLibrary()),
+      ChangeNotifierProvider<PlayersLibrary>(builder: (context) => PlayersLibrary()),
+    ],
     child: GameScoreboard(),
   ),
 );
