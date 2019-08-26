@@ -1,7 +1,6 @@
 // flutter
 import 'package:flutter/material.dart';
 // dependencies
-import 'package:provider/provider.dart';
 // app
 import 'package:game_scoreboard/screens/gamesScreen.dart';
 import 'package:game_scoreboard/screens/homeScreen.dart';
