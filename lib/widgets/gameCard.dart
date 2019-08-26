@@ -42,7 +42,8 @@ Card GameCard(BuildContext context, Game game) {
           context,
           MaterialPageRoute(
             builder: (context) => GameScreen(
-              game: game,
+              gameId: game.id,
+              gameName: game.name,
             )
           ),
         );

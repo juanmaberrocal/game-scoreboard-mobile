@@ -23,7 +23,8 @@ Card PlayerCard(BuildContext context, Player player) {
           context,
           MaterialPageRoute(
             builder: (context) => PlayerScreen(
-              player: player,
+              playerId: player.id,
+              playerNickname: player.nickname,
             )
           ),
         );
