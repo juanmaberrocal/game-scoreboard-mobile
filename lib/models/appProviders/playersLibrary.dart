@@ -17,6 +17,6 @@ class PlayersLibrary with ChangeNotifier {
   }
 
   Future<Players> load() async {
-    return await _players.fetch();
+    return _players.fetch();
   }
 }
