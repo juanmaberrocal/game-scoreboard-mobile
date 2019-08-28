@@ -97,8 +97,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       final String gameName = games.firstWhere((game) => game.id == gameId)?.name;
 
                       return ListTile(
-                        leading: match.winner ? Icon(Icons.star, color: Colors.yellow) : Icon(Icons.star_border),
-                        title: Text("${i + 1}. $gameName"),
+                        leading: Text("${i + 1}."),
+                        title: Text(gameName),
+                        subtitle: match.winner ? Text("Won") : Text("Lost"),
+                        trailing: match.winner ? Icon(Icons.star, color: Colors.yellow) : Icon(Icons.star_border),
                       );
                     },
                     separatorBuilder: (context, i) {

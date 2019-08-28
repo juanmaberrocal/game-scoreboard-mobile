@@ -33,9 +33,10 @@ class Game {
     this.minPlayTime, this.maxPlayTime,
   });
 
+  static String _apiPath = 'v1/games';
+
   Future<Game> fetch() async {
-    final String apiPath = 'v1/games';
-    final String url = '${apiPath}/${this.id}';
+    final String url = '${_apiPath}/${this.id}';
     Game game;
 
     final response = await ApiServices.get(url);
@@ -49,6 +50,16 @@ class Game {
 
     game = Game.fromJson(gameData);
     return game;
+  }
+
+  Future<List<dynamic>> standings(int id) async {
+    final String url = '${_apiPath}/${id}/standings';
+
+    final response = await ApiServices.get(url);
+    final responseJson = json.decode(response.body);
+    final responseData = responseJson['data'];
+
+    return responseData['attributes']['standings'];
   }
 
   factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);

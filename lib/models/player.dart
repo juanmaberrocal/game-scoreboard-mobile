@@ -27,9 +27,10 @@ class Player {
     this.id, this.email, this.firstName, this.lastName, this.nickname,
   });
 
+  static String _apiPath = 'v1/players';
+
   Future<Player> fetch() async {
-    final String apiPath = 'v1/players';
-    final String url = '${apiPath}/${this.id}';
+    final String url = '${_apiPath}/${this.id}';
     Player player;
 
     final response = await ApiServices.get(url);
@@ -43,6 +44,16 @@ class Player {
 
     player = Player.fromJson(playerData);
     return player;
+  }
+
+  Future<List<dynamic>> standings(int id) async {
+    final String url = '${_apiPath}/${id}/standings';
+
+    final response = await ApiServices.get(url);
+    final responseJson = json.decode(response.body);
+    final responseData = responseJson['data'];
+
+    return responseData['attributes']['standings'];
   }
 
   factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);

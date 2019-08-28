@@ -13,7 +13,6 @@ Card PlayerCard(BuildContext context, Player player) {
   final Widget card = ListTile(
     leading: Icon(Icons.person),
     title: Text(player.nickname),
-    subtitle: Text('Here is a second line'),
   );
 
   return Card(
