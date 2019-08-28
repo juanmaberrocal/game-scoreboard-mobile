@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 // dependencies
 // app
 import 'package:game_scoreboard/models/player.dart';
+import 'package:game_scoreboard/widgets/standingsList.dart';
 import 'package:game_scoreboard/widgets/errorDisplay.dart';
 
 /*
@@ -64,28 +65,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
               builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
                 if (snapshot.hasData) {
                   final List standings = snapshot.data;
-                  
-                  return Expanded(
-                    child: ListView.separated(
-                      itemCount: standings.length,
-                      itemBuilder: (context, i) {
-                        final Map<String, dynamic> standing = standings.elementAt(i);
-                        final String player = standing['name'];
-                        final int position = standing['position'];
-                        final int numWins = standing['num_won'];
-
-                        return ListTile(
-                          leading: Text("${i + 1}."),
-                          title: Text(player),
-                          subtitle: Text("Wins: $numWins"),
-                          trailing: position == 1 ? Icon(Icons.star, color: Colors.yellow) : Icon(Icons.star_border),
-                        );
-                      },
-                      separatorBuilder: (context, i) {
-                        return Divider(height: 4.0,); 
-                      },
-                    ),
-                  );
+                  return StandingsList(context, standings);
                 } else if (snapshot.hasError) {
                   return ErrorDisplay(context, "There was an error loading the standings");
                 }
