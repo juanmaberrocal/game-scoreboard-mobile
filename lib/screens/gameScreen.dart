@@ -25,7 +25,7 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   void initState() {
-    _game = Game(id: widget.gameId).fetch();
+    _game = Game().fetch(widget.gameId);
     _standings = Game().standings(widget.gameId);
 
     super.initState();

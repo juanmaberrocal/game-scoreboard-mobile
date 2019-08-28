@@ -35,8 +35,8 @@ class Game {
 
   static String _apiPath = 'v1/games';
 
-  Future<Game> fetch() async {
-    final String url = '${_apiPath}/${this.id}';
+  Future<Game> fetch(int id) async {
+    final String url = '${_apiPath}/${id}';
     Game game;
 
     final response = await ApiServices.get(url);
