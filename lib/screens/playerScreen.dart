@@ -26,7 +26,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
   @override
   void initState() {
-    _player = Player(id: widget.playerId).fetch();
+    _player = Player().fetch(widget.playerId);
     _standings = Player().standings(widget.playerId);
 
     super.initState();
