@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 // dependencies
 // app
+import 'package:game_scoreboard/helpers/colorSelector.dart';
 import 'package:game_scoreboard/models/player.dart';
 import 'package:game_scoreboard/widgets/standingsList.dart';
 import 'package:game_scoreboard/widgets/errorDisplay.dart';
@@ -47,8 +48,16 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 if (snapshot.hasData) {
                   final Player player = snapshot.data;
 
-                  return Center(
-                    child: Text("${player.firstName} ${player.lastName}"),
+                  return Column(
+                    children: <Widget>[
+                      CircleAvatar(
+                        minRadius: 50,
+                        backgroundColor: getColorFromString(player.nickname),
+                        child: Text("${player.firstName[0]}${player.lastName[0]}"),
+                      ),
+                      Text("${player.firstName} ${player.lastName}"),
+                      Text(player.email),
+                    ],
                   );
                 } else if (snapshot.hasError) {
                   return ErrorDisplay(context, "There was an error loading the player");

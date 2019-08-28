@@ -28,7 +28,7 @@ class _GamesScreenState extends State<GamesScreen> {
           padding: const EdgeInsets.all(20.0),
           mainAxisSpacing: 20.0,
           crossAxisSpacing: 10.0,
-          crossAxisCount: 2,
+          crossAxisCount: 3,
           children: gameCards,
         );
       },
