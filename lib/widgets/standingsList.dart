@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 /*
 Widget: StandingsList
 */
-Card StandingsList(BuildContext context, List standings) {
+Widget StandingsList(BuildContext context, List standings) {
   double dividerHeight = 4.0;
 
   return Expanded(

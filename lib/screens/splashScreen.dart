@@ -74,7 +74,7 @@ class _SplashScreenState extends State<SplashScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Image.asset("assets/images/game-die_1f3b2.png"),
+                  Image.asset("assets/images/logo.png"),
                   Container(
                     margin: EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
                     child: Text("Game Scoreboard", style: TextStyle(fontSize: 40.0, color: Colors.white),),

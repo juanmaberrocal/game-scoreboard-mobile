@@ -11,21 +11,10 @@ Widget: GameCard
 */
 Card GameCard(BuildContext context, Game game) {
   final Widget cardIcon = Center(
-    child: Container(
-      child: Center(
-        child: Text(
-          game.name[0].toUpperCase(),
-          style: DefaultTextStyle.of(context).style.apply(
-            fontSizeFactor: 3.7,
-            color: Colors.white,
-          ),
-        ),
-      ),
-      constraints: BoxConstraints.expand(),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: getColorFromString(game.name),
-      ),
+    child: CircleAvatar(
+      radius: 60.0,
+      backgroundColor: getColorFromString(game.name),
+      child: Text(game.name[0]),
     ),
   );
   final Widget cardTitle = Text(
@@ -50,12 +39,13 @@ Card GameCard(BuildContext context, Game game) {
       },
       child: Column(
         children: [
+          cardIcon,
           Expanded(
-            child: cardIcon,
-          ),
-          Container(
-            padding: EdgeInsets.all(8.0),
-            child: cardTitle,
+            child: Container(
+              padding: EdgeInsets.all(8.0),
+              alignment: Alignment.bottomCenter,
+              child: cardTitle,
+            ),
           ),
         ]
       ),
