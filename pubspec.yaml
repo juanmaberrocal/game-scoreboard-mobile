@@ -19,6 +19,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_rollbar: ^0.0.2
   http: ^0.12.0+2
   json_annotation: ^3.0.0
   pie_chart: ^1.2.0
