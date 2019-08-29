@@ -23,10 +23,16 @@ class _PlayersScreenState extends State<PlayersScreen> {
           (player) => PlayerCard(context, player)
         ).toList();
 
-        return ListView(
-          primary: false,
-          padding: const EdgeInsets.all(20.0),
-          children: playerCards,
+        return RefreshIndicator(
+          child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            primary: false,
+            padding: const EdgeInsets.all(20.0),
+            children: playerCards,
+          ),
+          onRefresh: () {
+            return Provider.of<PlayersLibrary>(context, listen: false).load();
+          }
         );
       },
     );

@@ -23,13 +23,19 @@ class _GamesScreenState extends State<GamesScreen> {
           (game) => GameCard(context, game)
         ).toList();
 
-        return GridView.count(
-          primary: false,
-          padding: const EdgeInsets.all(20.0),
-          mainAxisSpacing: 20.0,
-          crossAxisSpacing: 10.0,
-          crossAxisCount: 3,
-          children: gameCards,
+        return RefreshIndicator(
+          child: GridView.count(
+            physics: const AlwaysScrollableScrollPhysics(),
+            primary: false,
+            padding: const EdgeInsets.all(20.0),
+            mainAxisSpacing: 20.0,
+            crossAxisSpacing: 10.0,
+            crossAxisCount: 3,
+            children: gameCards,
+          ),
+          onRefresh: () {
+            return Provider.of<GamesLibrary>(context, listen: false).load();
+          }
         );
       },
     );
