@@ -23,19 +23,23 @@ class _GamesScreenState extends State<GamesScreen> {
           (game) => GameCard(context, game)
         ).toList();
 
-        return RefreshIndicator(
-          child: GridView.count(
-            physics: const AlwaysScrollableScrollPhysics(),
-            primary: false,
-            padding: const EdgeInsets.all(20.0),
-            mainAxisSpacing: 20.0,
-            crossAxisSpacing: 10.0,
-            crossAxisCount: 3,
-            children: gameCards,
-          ),
-          onRefresh: () {
-            return Provider.of<GamesLibrary>(context, listen: false).load();
-          }
+        return OrientationBuilder(
+          builder: (context, orientation) {
+            return RefreshIndicator(
+              child: GridView.count(
+                physics: const AlwaysScrollableScrollPhysics(),
+                primary: false,
+                padding: const EdgeInsets.all(20.0),
+                mainAxisSpacing: 20.0,
+                crossAxisSpacing: 10.0,
+                crossAxisCount: orientation == Orientation.portrait ? 3 : 5,
+                children: gameCards,
+              ),
+              onRefresh: () {
+                return Provider.of<GamesLibrary>(context, listen: false).load();
+              }
+            );
+          },
         );
       },
     );
