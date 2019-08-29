@@ -40,7 +40,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
       ),
       body: Container(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
+        child: ListView(
           children: <Widget>[
             FutureBuilder<Player>(
               future: _player,
@@ -64,11 +64,19 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 }
 
                 // By default, show a loading spinner.
-                return CircularProgressIndicator();
+                return Center(
+                  child: SizedBox(
+                    height: 30.0,
+                    width: 30.0,
+                    child: CircularProgressIndicator()
+                  ),
+                );
               }
             ),
             Divider(),
-            Text("Standings:"),
+            Center(
+              child: Text("Standings:"),
+            ),
             FutureBuilder<List>(
               future: _standings,
               builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
@@ -80,7 +88,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 }
 
                 // By default, show a loading spinner.
-                return CircularProgressIndicator();
+                return Center(
+                  child: SizedBox(
+                    height: 30.0,
+                    width: 30.0,
+                    child: CircularProgressIndicator()
+                  ),
+                );
               },
             ),
           ],

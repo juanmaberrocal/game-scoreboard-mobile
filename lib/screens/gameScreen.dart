@@ -92,7 +92,13 @@ class _GameScreenState extends State<GameScreen> {
                 }
 
                 // By default, show a loading spinner.
-                return CircularProgressIndicator();
+                return Center(
+                  child: SizedBox(
+                    height: 30.0,
+                    width: 30.0,
+                    child: CircularProgressIndicator()
+                  ),
+                );
               },
             ),
             Divider(),
@@ -110,7 +116,13 @@ class _GameScreenState extends State<GameScreen> {
                 }
 
                 // By default, show a loading spinner.
-                return CircularProgressIndicator();
+                return Center(
+                  child: SizedBox(
+                    height: 30.0,
+                    width: 30.0,
+                    child: CircularProgressIndicator()
+                  ),
+                );
               },
             ),
           ],
