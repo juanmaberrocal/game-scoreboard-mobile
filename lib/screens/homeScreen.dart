@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           return Container(
             padding: const EdgeInsets.all(20.0),
-            child: Column(
+            child: ListView(
               children: <Widget>[
                 Row(
                   children: <Widget>[
@@ -87,8 +87,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   dataMap: gamesPie,
                 ),
                 Divider(),
-                Text("Last 5 Games:"),
-                Expanded(
+                Center(
+                  child: Text("Last 5 Games:"),
+                ),
+                SizedBox(
+                  height: lastMatches.length < 5 ? (lastMatches.length * 75.0) : 375.0,
                   child: ListView.separated(
                     itemCount: lastMatches.length,
                     itemBuilder: (context, i) {
@@ -112,7 +115,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         } else if (snapshot.hasError) {
-          print(snapshot.error);
           return ErrorDisplay(context, "There was an error loading the players");
         }
 
