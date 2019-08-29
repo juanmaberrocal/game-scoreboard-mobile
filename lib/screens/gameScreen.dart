@@ -39,7 +39,7 @@ class _GameScreenState extends State<GameScreen> {
       ),
       body: Container(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
+        child: ListView(
           children: <Widget>[
             FutureBuilder<Game>(
               future: _game,
@@ -52,7 +52,7 @@ class _GameScreenState extends State<GameScreen> {
                       Container(
                         height: 200,
                         width: double.infinity,
-                        margin: EdgeInsets.all(30),
+                        margin: EdgeInsets.only(bottom: 30),
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             image: AssetImage('assets/images/Missing-image-232x150.png'),
@@ -96,7 +96,9 @@ class _GameScreenState extends State<GameScreen> {
               },
             ),
             Divider(),
-            Text("Standings:"),
+            Center(
+              child: Text("Standings:"),
+            ),
             FutureBuilder<List>(
               future: _standings,
               builder: (BuildContext context, AsyncSnapshot<List> snapshot) {

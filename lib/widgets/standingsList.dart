@@ -9,7 +9,8 @@ Widget: StandingsList
 Widget StandingsList(BuildContext context, List standings) {
   double dividerHeight = 4.0;
 
-  return Expanded(
+  return SizedBox(
+    height: standings.length < 5 ? (standings.length * 75.0) : 375.0,
     child: ListView.separated(
       itemCount: standings.length,
       itemBuilder: (context, i) {
