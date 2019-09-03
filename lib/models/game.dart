@@ -36,7 +36,7 @@ class Game {
   static String _apiPath = 'v1/games';
 
   Future<Game> fetch(int id) async {
-    final String url = '${_apiPath}/${id}';
+    final String url = '$_apiPath/$id';
     Game game;
 
     final response = await ApiServices.get(url);
@@ -53,7 +53,7 @@ class Game {
   }
 
   Future<List<dynamic>> standings(int id) async {
-    final String url = '${_apiPath}/${id}/standings';
+    final String url = '$_apiPath/$id/standings';
 
     final response = await ApiServices.get(url);
     final responseJson = json.decode(response.body);

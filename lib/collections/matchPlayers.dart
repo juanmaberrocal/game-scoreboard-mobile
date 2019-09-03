@@ -47,7 +47,7 @@ class MatchPlayers {
     Map<int, dynamic> _winPctMap = {};
 
     _records.forEach((record) {
-      final int playerId = record.player_id;
+      final int playerId = record.playerId;
       final bool winner = record.winner;
 
       _winPctMap.putIfAbsent(playerId, () => { 'wins': 0, 'total': 0 });

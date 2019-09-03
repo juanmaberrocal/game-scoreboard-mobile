@@ -55,8 +55,10 @@ class _GameScreenState extends State<GameScreen> {
                         margin: EdgeInsets.only(bottom: 30),
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage('assets/images/Missing-image-232x150.png'),
-                            fit: BoxFit.cover,
+                            image: false ? NetworkImage(
+                              "https://cf.geekdo-images.com/itemrep/img/aozRplCSOpRucLxSuClX2odEUBQ=/fit-in/246x300/pic2419375.jpg"
+                            ) : AssetImage('assets/images/Missing-image-232x150.png'),
+                            fit: BoxFit.contain,
                           ),
                         ),
                       ),

@@ -57,7 +57,7 @@ abstract class ApiServices {
       Map<String, dynamic> apiBody,
     }
   ) async {
-    final String url = '${_apiRoot}${apiEndpoint}';
+    final String url = '$_apiRoot$apiEndpoint';
     final Map<String, String> headers = await _buildApiHeaders(apiHeaders: apiHeaders);
     final Uri uri = _buildUri(url, apiQuery: apiBody);
 
@@ -74,7 +74,7 @@ abstract class ApiServices {
       Map<String, dynamic> apiBody,
     }
   ) async {
-    final String url = '${_apiRoot}${apiEndpoint}';
+    final String url = '$_apiRoot$apiEndpoint';
     final Map<String, String> headers = await _buildApiHeaders(apiHeaders: apiHeaders);
     final Map<String, dynamic> body = _buildBody(apiBody: apiBody);
 
@@ -92,7 +92,7 @@ abstract class ApiServices {
       Map<String, dynamic> apiBody,
     }
   ) async {
-    final String url = '${_apiRoot}${apiEndpoint}';
+    final String url = '$_apiRoot$apiEndpoint';
     final Map<String, String> headers = await _buildApiHeaders(apiHeaders: apiHeaders);
     final Uri uri = _buildUri(url, apiQuery: apiBody);
 

@@ -11,7 +11,7 @@ Collection: Matches
 */
 class Matches {
   static const _apiPath = 'v1/matches';
-  List<Match> _records = [];
+  List<Match> _records = <Match>[];
 
   List<Match> get records {
     return _records;
