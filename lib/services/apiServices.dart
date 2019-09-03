@@ -4,13 +4,14 @@ import 'dart:convert';
 // dependencies
 import 'package:http/http.dart' as http;
 // app
+import 'package:game_scoreboard/env/env.dart';
 import 'package:game_scoreboard/data/storedUser.dart';
 
 /*
 Service: API
 */
 abstract class ApiServices {
-  static String _apiRoot = 'http://localhost:3000/';
+  static String _apiRoot = env.apiRoot;
   static Map<String, String> _apiBaseHeaders = {
     'Accept': 'application/json',
     'Content-Type': 'application/json'

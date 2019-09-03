@@ -2,10 +2,11 @@
 // dependencies
 import 'package:flutter_rollbar/flutter_rollbar.dart';
 // app
+import 'package:game_scoreboard/env/env.dart';
 
 Rollbar rollBar = Rollbar()
-    ..accessToken = '84e389f714904aca94e7201af6a09850'
-    ..environment = isInDebugMode ? 'development' : 'production';
+    ..accessToken = env.rollbarToken
+    ..environment = env.environment.toString().split('.').last;
 
 bool get isInDebugMode {
   // Assume you're in production mode.

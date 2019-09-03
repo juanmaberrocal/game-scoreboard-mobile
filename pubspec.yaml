@@ -53,7 +53,7 @@ flutter:
   assets:
    - assets/images/logo.png
    - assets/images/Missing-image-232x150.png
-  #  - images/a_dot_ham.jpeg
+   - lib/env/dev.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
