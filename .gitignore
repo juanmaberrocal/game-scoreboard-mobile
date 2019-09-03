@@ -1,7 +1,6 @@
 # Environment
 lib/env/dev.json
 lib/env/prod.json
-lib/env/stg.json
 
 # Miscellaneous
 *.class
