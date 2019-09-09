@@ -27,6 +27,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
           appBar: AppBar(
             title: Text(player.nickname),
           ),
+          bottomNavigationBar: BottomNavigationBar(
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.camera_alt),
+                title: Text('Avatar'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.edit),
+                title: Text('Edit'),
+              ),
+            ],
+            selectedItemColor: Theme.of(context).textTheme.caption.color,
+          ),
           body: Container(
             padding: const EdgeInsets.all(20.0),
             child: Column(
