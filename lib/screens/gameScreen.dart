@@ -40,7 +40,7 @@ class _GameScreenState extends State<GameScreen> {
         title: Text(widget.gameName),
       ),
       body: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(20.0),
         child: ListView(
           children: <Widget>[
             FutureBuilder<Game>(
