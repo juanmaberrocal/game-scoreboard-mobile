@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 // dependencies
 import 'package:provider/provider.dart';
 // app
-import 'package:game_scoreboard/helpers/colorSelector.dart';
 import 'package:game_scoreboard/models/appProviders/currentPlayer.dart';
 import 'package:game_scoreboard/models/player.dart';
-import 'package:game_scoreboard/widgets/errorDisplay.dart';
+import 'package:game_scoreboard/widgets/playerCard.dart';
 
 /*
 Screen: Profile
@@ -40,18 +39,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ],
             selectedItemColor: Theme.of(context).textTheme.caption.color,
           ),
-          body: Container(
-            padding: const EdgeInsets.all(20.0),
+          body: Padding(
+            padding: EdgeInsets.all(20.0),
             child: Column(
               children: <Widget>[
-                CircleAvatar(
-                  minRadius: 50,
-                  backgroundColor: getColorFromString(player.nickname),
-                  child: Text("${player.firstName[0]}${player.lastName[0]}"),
-                ),
-                Text("${player.firstName} ${player.lastName}"),
-                Text(player.email),
-              ]
+                PlayerCard(player: player,),
+              ],
             ),
           ),
         ); 
