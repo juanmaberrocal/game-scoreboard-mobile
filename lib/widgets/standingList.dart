@@ -21,14 +21,14 @@ class StandingList extends StatelessWidget {
     Key key,
     @required this.standingsData,
     this.title = 'Standings:',
-    this.dividerHeight = 4.0,
+    this.dividerHeight = 0.0,
   }) : super(key: key);
 
   final List<dynamic> standingsData;
   final String title;
   final double dividerHeight;
 
-  final double listHeightMultiplier = 75.0;
+  final double listHeightMultiplier = 85.0;
   final double listHeightFixed = 375.0;
 
   int listLength() {
@@ -47,8 +47,30 @@ class StandingList extends StatelessWidget {
       height: listHeight(),
       child: Column(
         children: <Widget>[
-          Text(title),
+          Container(
+            padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 5.0),
+            decoration: BoxDecoration(
+//              color: Theme.of(context).accentColor,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(5.0),
+              ),
+            ),
+            child: Text(
+              title,
+              style: TextStyle(
+//                color: Colors.white,
+//                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
           Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+//                color: Theme.of(context).accentColor,
+                borderRadius: BorderRadius.all(
+                    Radius.circular(5.0),
+                ),
+              ),
               child: ListView.separated(
                 itemCount: listLength(),
                 itemBuilder: (BuildContext context, int index) {
@@ -64,6 +86,7 @@ class StandingList extends StatelessWidget {
                 },
                 physics: ClampingScrollPhysics(),
               ),
+            ),
           ),
         ],
       ),
