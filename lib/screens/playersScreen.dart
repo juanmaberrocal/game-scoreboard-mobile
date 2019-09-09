@@ -1,4 +1,5 @@
 // flutter
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // dependencies
 import 'package:provider/provider.dart';
@@ -44,7 +45,7 @@ class _PlayersScreenState extends State<PlayersScreen> {
 class _PlayerListElement extends StatelessWidget {
   _PlayerListElement({
     Key key,
-    this.player,
+    @required this.player,
   }) : super(key: key);
 
   final Player player;

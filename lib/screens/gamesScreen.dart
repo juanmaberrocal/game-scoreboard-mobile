@@ -1,4 +1,5 @@
 // flutter
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // dependencies
 import 'package:provider/provider.dart';
@@ -51,7 +52,7 @@ class _GamesScreenState extends State<GamesScreen> {
 class _GameGridElement extends StatelessWidget {
   _GameGridElement({
     Key key,
-    this.game,
+    @required this.game,
   }) : super(key: key);
 
   final Game game;
