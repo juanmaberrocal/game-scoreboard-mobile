@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 // dependencies
 import 'package:provider/provider.dart';
 // app
+import 'package:game_scoreboard/helpers/colorSelector.dart';
 import 'package:game_scoreboard/models/appProviders/playersLibrary.dart';
-import 'package:game_scoreboard/widgets/playerCard.dart';
+import 'package:game_scoreboard/models/player.dart';
+import 'package:game_scoreboard/screens/playerScreen.dart';
 
 /*
 Screen: Players Dashboard
@@ -20,7 +22,7 @@ class _PlayersScreenState extends State<PlayersScreen> {
     return Consumer<PlayersLibrary>(
       builder: (context, playersLibrary, child) {
         final List<Widget> playerCards = playersLibrary.players.map(
-          (player) => PlayerCard(context, player)
+          (player) => _PlayerListElement(player: player,)
         ).toList();
 
         return RefreshIndicator(
@@ -35,6 +37,41 @@ class _PlayersScreenState extends State<PlayersScreen> {
           }
         );
       },
+    );
+  }
+}
+
+class _PlayerListElement extends StatelessWidget {
+  _PlayerListElement({
+    Key key,
+    this.player,
+  }) : super(key: key);
+
+  final Player player;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PlayerScreen(
+                playerId: player.id,
+                playerNickname: player.nickname,
+              ),
+            ),
+          );
+        },
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: getColorFromString(player.nickname),
+            child: Text("${player.nickname[0]}"),
+          ),
+          title: Text(player.nickname),
+        ),
+      ),
     );
   }
 }
