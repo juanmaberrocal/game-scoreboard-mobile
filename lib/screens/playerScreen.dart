@@ -1,4 +1,5 @@
 // flutter
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // dependencies
 // app
@@ -35,20 +36,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
     super.initState();
   }
 
-  Widget playerBody(Player player) {
-    return Column(
-      children: <Widget>[
-        CircleAvatar(
-          minRadius: 50,
-          backgroundColor: getColorFromString(player.nickname),
-          child: Text("${player.firstName[0]}${player.lastName[0]}"),
-        ),
-        Text("${player.firstName} ${player.lastName}"),
-        Text(player.email),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +50,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                   future: _player,
                   builder: (BuildContext context, AsyncSnapshot<Player> snapshot) {
                     if (snapshot.hasData) {
-                      return playerBody(snapshot.data);
+                      return _PlayerBody(player: snapshot.data);
                     } else if (snapshot.hasError) {
                       return ErrorDisplay(
                         errorMessage: 'Could not load game data',
@@ -95,6 +82,47 @@ class _PlayerScreenState extends State<PlayerScreen> {
             ],
           ),
         )
+    );
+  }
+}
+
+class _PlayerBody extends StatelessWidget {
+  _PlayerBody({
+    Key key,
+    @required this.player
+  }) : super(key: key);
+
+  final Player player;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.only(top: 50.0),
+          width: double.infinity,
+          child: Card(
+            child: Container(
+              margin: EdgeInsets.only(top: 50.0),
+              padding: EdgeInsets.all(20.0),
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    "${player.firstName} ${player.lastName}",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(player.email),
+                ],
+              ),
+            ),
+          ),
+        ),
+        CircleAvatar(
+          minRadius: 50,
+          backgroundColor: getColorFromString(player.nickname),
+          child: Text("${player.firstName[0]}${player.lastName[0]}"),
+        ),
+      ],
     );
   }
 }
