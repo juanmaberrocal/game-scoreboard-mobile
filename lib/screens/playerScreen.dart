@@ -4,14 +4,17 @@ import 'package:flutter/material.dart';
 // app
 import 'package:game_scoreboard/helpers/colorSelector.dart';
 import 'package:game_scoreboard/models/player.dart';
-import 'package:game_scoreboard/widgets/standingsList.dart';
+import 'package:game_scoreboard/widgets/circleLoader.dart';
 import 'package:game_scoreboard/widgets/errorDisplay.dart';
+import 'package:game_scoreboard/widgets/standingList.dart';
 
 /*
 Screen: Player
 */
 class PlayerScreen extends StatefulWidget {
-  PlayerScreen({Key key, this.playerId, this.playerNickname}) : super(key: key);
+  PlayerScreen({
+    Key key, this.playerId, this.playerNickname
+  }) : super(key: key);
 
   final int playerId;
   final String playerNickname;
@@ -32,74 +35,66 @@ class _PlayerScreenState extends State<PlayerScreen> {
     super.initState();
   }
 
+  Widget playerBody(Player player) {
+    return Column(
+      children: <Widget>[
+        CircleAvatar(
+          minRadius: 50,
+          backgroundColor: getColorFromString(player.nickname),
+          child: Text("${player.firstName[0]}${player.lastName[0]}"),
+        ),
+        Text("${player.firstName} ${player.lastName}"),
+        Text(player.email),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.playerNickname),
-      ),
-      body: Container(
-        padding: const EdgeInsets.all(20.0),
-        child: ListView(
-          children: <Widget>[
-            FutureBuilder<Player>(
-              future: _player,
-              builder: (BuildContext context, AsyncSnapshot<Player> snapshot) {
-                if (snapshot.hasData) {
-                  final Player player = snapshot.data;
-
-                  return Column(
-                    children: <Widget>[
-                      CircleAvatar(
-                        minRadius: 50,
-                        backgroundColor: getColorFromString(player.nickname),
-                        child: Text("${player.firstName[0]}${player.lastName[0]}"),
-                      ),
-                      Text("${player.firstName} ${player.lastName}"),
-                      Text(player.email),
-                    ],
-                  );
-                } else if (snapshot.hasError) {
-                  return ErrorDisplay(context, "There was an error loading the player");
-                }
-
-                // By default, show a loading spinner.
-                return Center(
-                  child: SizedBox(
-                    height: 30.0,
-                    width: 30.0,
-                    child: CircularProgressIndicator()
-                  ),
-                );
-              }
-            ),
-            Divider(),
-            Center(
-              child: Text("Standings:"),
-            ),
-            FutureBuilder<List>(
-              future: _standings,
-              builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
-                if (snapshot.hasData) {
-                  final List standings = snapshot.data;
-                  return StandingsList(context, standings);
-                } else if (snapshot.hasError) {
-                  return ErrorDisplay(context, "There was an error loading the standings");
-                }
-
-                // By default, show a loading spinner.
-                return Center(
-                  child: SizedBox(
-                    height: 30.0,
-                    width: 30.0,
-                    child: CircularProgressIndicator()
-                  ),
-                );
-              },
-            ),
-          ],
+        appBar: AppBar(
+          title: Text(widget.playerNickname),
         ),
-      ),
+        body: Padding(
+          padding: EdgeInsets.all(20.0),
+          child: ListView(
+            children: <Widget>[
+              FutureBuilder<Player>(
+                  future: _player,
+                  builder: (BuildContext context, AsyncSnapshot<Player> snapshot) {
+                    if (snapshot.hasData) {
+                      return playerBody(snapshot.data);
+                    } else if (snapshot.hasError) {
+                      return ErrorDisplay(
+                        errorMessage: 'Could not load game data',
+                      );
+                    }
+
+                    return CircleLoader();
+                  }
+              ),
+              FutureBuilder(
+                  future: _standings,
+                  builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+                    if (snapshot.hasData) {
+                      final List<dynamic> standingsData = snapshot.data;
+
+                      return StandingList(
+                        standingsData: standingsData,
+                      );
+                    } else if (snapshot.hasError) {
+                      return ErrorDisplay(
+                        errorMessage: 'Could not load standings table',
+                      );
+                    }
+
+                    // By default, show a loading spinner.
+                    return CircleLoader();
+                  }
+              ),
+            ],
+          ),
+        )
     );
   }
 }

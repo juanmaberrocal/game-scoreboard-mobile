@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 // dependencies
 // app
 import 'package:game_scoreboard/models/game.dart';
-import 'package:game_scoreboard/widgets/standingsList.dart';
+import 'package:game_scoreboard/widgets/circleLoader.dart';
 import 'package:game_scoreboard/widgets/errorDisplay.dart';
+import 'package:game_scoreboard/widgets/standingList.dart';
 
 /*
 Screen: Game
@@ -31,105 +32,97 @@ class _GameScreenState extends State<GameScreen> {
     super.initState();
   }
 
+  Widget gameBody(Game game) {
+    return Column(
+      children: <Widget>[
+        Container(
+          height: 200,
+          width: double.infinity,
+          margin: EdgeInsets.only(bottom: 30),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: false ? NetworkImage(
+                  "https://cf.geekdo-images.com/itemrep/img/aozRplCSOpRucLxSuClX2odEUBQ=/fit-in/246x300/pic2419375.jpg"
+              ) : AssetImage('assets/images/Missing-image-232x150.png'),
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+        Text(game.description),
+        Container(
+          margin: EdgeInsets.all(30),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Column(
+                  children: <Widget>[
+                    Icon(Icons.group),
+                    Text("${game.minPlayers.toString()} - ${game.maxPlayers.toString()}"),
+                  ],
+                ),
+              ),
+              VerticalDivider(),
+              Expanded(
+                child: Column(
+                  children: <Widget>[
+                    Icon(Icons.timer),
+                    Text("${game.minPlayTime.toString()} - ${game.maxPlayTime.toString()}"),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.gameName),
       ),
-      body: Container(
-        padding: const EdgeInsets.all(20.0),
+      body: Padding(
+        padding: EdgeInsets.all(20.0),
         child: ListView(
           children: <Widget>[
             FutureBuilder<Game>(
-              future: _game,
-              builder: (BuildContext context, AsyncSnapshot<Game> snapshot) {
-                if (snapshot.hasData) {
-                  final Game game = snapshot.data;
+                future: _game,
+                builder: (BuildContext context, AsyncSnapshot<Game> snapshot) {
+                  if (snapshot.hasData) {
+                    return gameBody(snapshot.data);
+                  } else if (snapshot.hasError) {
+                    return ErrorDisplay(
+                      errorMessage: 'Could not load game data',
+                    );
+                  }
 
-                  return Column(
-                    children: <Widget>[
-                      Container(
-                        height: 200,
-                        width: double.infinity,
-                        margin: EdgeInsets.only(bottom: 30),
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: false ? NetworkImage(
-                              "https://cf.geekdo-images.com/itemrep/img/aozRplCSOpRucLxSuClX2odEUBQ=/fit-in/246x300/pic2419375.jpg"
-                            ) : AssetImage('assets/images/Missing-image-232x150.png'),
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
-                      Text(game.description),
-                      Container(
-                        margin: EdgeInsets.all(30),
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Column(
-                                children: <Widget>[
-                                  Icon(Icons.group),
-                                  Text("${game.minPlayers.toString()} - ${game.maxPlayers.toString()}"),
-                                ],
-                              ),
-                            ),
-                            VerticalDivider(),
-                            Expanded(
-                              child: Column(
-                                children: <Widget>[
-                                  Icon(Icons.timer),
-                                  Text("${game.minPlayTime.toString()} - ${game.maxPlayTime.toString()}"),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                } else if (snapshot.hasError) {
-                  return ErrorDisplay(context, "There was an error loading the game");
+                  return CircleLoader();
                 }
+            ),
+            FutureBuilder(
+                future: _standings,
+                builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+                  if (snapshot.hasData) {
+                    final List<dynamic> standingsData = snapshot.data;
 
-                // By default, show a loading spinner.
-                return Center(
-                  child: SizedBox(
-                    height: 30.0,
-                    width: 30.0,
-                    child: CircularProgressIndicator()
-                  ),
-                );
-              },
-            ),
-            Divider(),
-            Center(
-              child: Text("Standings:"),
-            ),
-            FutureBuilder<List>(
-              future: _standings,
-              builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
-                if (snapshot.hasData) {
-                  final List standings = snapshot.data;
-                  return StandingsList(context, standings);
-                } else if (snapshot.hasError) {
-                  return ErrorDisplay(context, "There was an error loading the standings");
+                    return StandingList(
+                      standingsData: standingsData,
+                    );
+                  } else if (snapshot.hasError) {
+                    return ErrorDisplay(
+                      errorMessage: 'Could not load standings table',
+                    );
+                  }
+
+                  // By default, show a loading spinner.
+                  return CircleLoader();
                 }
-
-                // By default, show a loading spinner.
-                return Center(
-                  child: SizedBox(
-                    height: 30.0,
-                    width: 30.0,
-                    child: CircularProgressIndicator()
-                  ),
-                );
-              },
             ),
           ],
         ),
-      ),
+      )
     );
   }
 }
