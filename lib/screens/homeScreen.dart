@@ -9,6 +9,7 @@ import 'package:game_scoreboard/models/appProviders/currentPlayer.dart';
 import 'package:game_scoreboard/models/appProviders/gamesLibrary.dart';
 import 'package:game_scoreboard/models/game.dart';
 import 'package:game_scoreboard/models/match.dart';
+import 'package:game_scoreboard/widgets/circleLoader.dart';
 import 'package:game_scoreboard/widgets/errorDisplay.dart';
 
 /*
@@ -35,64 +36,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Matches>(
-      future: _matches,
-      builder: (BuildContext context, AsyncSnapshot<Matches> snapshot) {
-        if (snapshot.hasData) {
-          final Matches matches = snapshot.data;
+    return Padding(
+      padding: EdgeInsets.all(20.0),
+      child: FutureBuilder<Matches>(
+        future: _matches,
+        builder: (BuildContext context, AsyncSnapshot<Matches> snapshot) {
+          if (snapshot.hasData) {
+            final Matches matches = snapshot.data;
 
-          final List<Game> games = Provider.of<GamesLibrary>(context, listen: false).games;
+            final List<Game> games = Provider.of<GamesLibrary>(context, listen: false).games;
 
-          final Iterable<Match> matchesWon = matches.records.where((match) => match.winner);
-          final double winPct = matchesWon.length / matches.count();
+            final Iterable<Match> lastMatches = matches.records.take(5);
 
-          Map<String, double> gamesPie = {};
-          matchesWon.forEach((match) {
-            int gameId = match.gameId;
-            String gameName = games.firstWhere((game) => game.id == gameId)?.name;
-
-            gamesPie.putIfAbsent(gameName, () => 0);
-            gamesPie[gameName]++;
-          });
-
-          final Iterable<Match> lastMatches = matches.records.take(5);
-
-          return Container(
-            padding: const EdgeInsets.all(20.0),
-            child: ListView(
+            return ListView(
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Column(
-                        children: <Widget>[
-                          Text("Games Played:"),
-                          Text("${matches.count()}"),
-                        ],
-                      ),
-                    ),
-                    VerticalDivider(),
-                    Expanded(
-                      child: Column(
-                        children: <Widget>[
-                          Text("Games Won:"),
-                          Text("${(winPct * 100).toStringAsFixed(0)}%"),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                Divider(),
-                PieChart(
-                  dataMap: gamesPie,
-                ),
-                Divider(),
-                Center(
-                  child: Text("Last 5 Games:"),
-                ),
-                SizedBox(
-                  height: lastMatches.length < 5 ? (lastMatches.length * 75.0) : 375.0,
+                _HomeBody(matches: matches,),
+                Container(
+                  height: 375.0,
                   child: ListView.separated(
+                    physics: ClampingScrollPhysics(),
                     itemCount: lastMatches.length,
                     itemBuilder: (context, i) {
                       final Match match = lastMatches.elementAt(i);
@@ -107,20 +69,157 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     },
                     separatorBuilder: (context, i) {
-                      return Divider(height: 4.0,); 
+                      return Divider(height: 4.0,);
                     },
                   ),
                 ),
               ],
-            ),
-          );
-        } else if (snapshot.hasError) {
-          return ErrorDisplay(context, "There was an error loading the players");
-        }
+            );
+          }
+          else if (snapshot.hasError) {
+            return ErrorDisplay(
+                errorMessage: "There was an error loading the players"
+            );
+          }
 
-        // By default, show a loading spinner.
-        return CircularProgressIndicator();
-      },
+          // By default, show a loading spinner.
+          return CircleLoader();
+        },
+      ),
+    );
+  }
+}
+
+class _HomeBody extends StatelessWidget {
+  _HomeBody({
+    Key key,
+    this.matches,
+  }) : super(key: key);
+
+  final Matches matches;
+
+  @override
+  Widget build(BuildContext context) {
+    final List<Game> games = Provider.of<GamesLibrary>(context, listen: false).games;
+
+    final Iterable<Match> matchesWon = matches.records.where((match) => match.winner);
+    final double winPct = matchesWon.length / matches.count();
+
+    Map<String, double> gamesPie = {};
+    matchesWon.forEach((match) {
+      int gameId = match.gameId;
+      String gameName = games.firstWhere((game) => game.id == gameId)?.name;
+
+      gamesPie.putIfAbsent(gameName, () => 0);
+      gamesPie[gameName]++;
+    });
+
+    return Column(
+      children: <Widget>[
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              child: Card(
+                child: Container(
+                  height: MediaQuery.of(context).size.width * 0.33,
+                  padding: EdgeInsets.only(right: 5.0),
+                  child: Stack(
+                    children: <Widget>[
+                      Positioned(
+                        child: RotatedBox(
+                          child: Text(
+                            'PLAYED',
+                            style: TextStyle(
+                              fontSize: 30,
+                            ),
+                          ),
+                          quarterTurns: 1,
+                        ),
+                        top: 0.0,
+                        left: -7.0,
+                      ),
+                      Align(
+                        child: Text(
+                          "${matches.count()}",
+                          style: TextStyle(
+                            fontSize: 80,
+                          ),
+                        ),
+                        alignment: Alignment.centerRight,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 17.0),
+              child: Card(
+                child: Container(
+                  height: MediaQuery.of(context).size.width * 0.30,
+                  width: MediaQuery.of(context).size.width * 0.50,
+                  padding: EdgeInsets.all(0.0),
+                  child: Stack(
+                    children: <Widget>[
+                      Positioned(
+                        child: Text(
+                          'WIN %',
+                          style: TextStyle(
+                            fontSize: 50,
+                          ),
+                        ),
+                        top: -12.0,
+                        left: 0.0,
+                      ),
+                      Positioned(
+                        child: Text(
+                          "${(winPct * 100).toStringAsFixed(0)}",
+                          style: TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 100,
+                            height: 0,
+                          ),
+                        ),
+                        bottom: 0.0,
+                        right: 2.0,
+                      ),
+                    ],
+                  ),
+                ),
+                elevation: 5.0,
+              ),
+            ),
+          ],
+        ),
+
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 35.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                "Favorite Games",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.left,
+              ),
+              Card(
+                child: PieChart(dataMap: gamesPie),
+                elevation: 3.0,
+              ),
+            ],
+          ),
+        ),
+
+
+        Center(
+          child: Text("Recent Games:"),
+        ),
+      ],
     );
   }
 }
