@@ -29,27 +29,67 @@ class PlayerCard extends StatelessWidget {
           margin: EdgeInsets.only(top: 50.0),
           width: double.infinity,
           child: Card(
-            child: Container(
-              margin: EdgeInsets.only(top: 50.0),
-              padding: EdgeInsets.all(20.0),
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    "${player.firstName} ${player.lastName}",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(player.email),
-                ],
-              ),
-            ),
+            child: _CardBody(player: player,),
           ),
         ),
-        CircleAvatar(
-          minRadius: 50,
-          backgroundColor: getColorFromString(player.nickname),
-          child: Text("${player.firstName[0]}${player.lastName[0]}"),
+        Center(
+          child: _CardAvatar(player: player,),
         ),
       ],
+    );
+  }
+}
+
+class _CardBody extends StatelessWidget {
+  _CardBody({
+    Key key,
+    this.player,
+  }) : super(key: key);
+
+  final Player player;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 50.0),
+      padding: EdgeInsets.all(20.0),
+      child: Column(
+        children: <Widget>[
+          Text(
+            "${player.firstName} ${player.lastName}",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          Text(player.email),
+        ],
+      ),
+    );
+  }
+}
+
+class _CardAvatar extends StatelessWidget {
+  _CardAvatar({
+    Key key,
+    this.player,
+    this.radius = 50.0,
+  }) : super(key: key);
+
+  final Player player;
+  final double radius;
+
+  @override
+  Widget build(BuildContext context) {
+    final String initials = "${player.firstName[0]}${player.lastName[0]}";
+    final String url = player.avatarUrl ?? "";
+
+    return CircleAvatar(
+      radius: radius,
+      backgroundColor: getColorFromString(player.nickname),
+      child: (
+        player.avatarUrl == null ? Text(initials) : null
+      ),
+      backgroundImage: (
+        player.avatarUrl != null ? NetworkImage(url) : null
+      ),
     );
   }
 }
