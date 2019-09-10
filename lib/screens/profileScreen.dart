@@ -18,6 +18,16 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  void _uploadAvatar(BuildContext context, image) {
+    // ensure user didn't cancel out
+    if (image != null) {
+      Navigator.pop(context);
+      Provider.of<CurrentPlayer>(context, listen: false).uploadAvatar(
+        file: image,
+      );
+    }
+  }
+
   Future<void> _openAvatarOptions() {
     return showDialog(
       context: context,
@@ -30,12 +40,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 GestureDetector(
                   child: Text('Take a Picture'),
                   onTap: () async {
-                    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+                    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+                    _uploadAvatar(context, image);
                   },
                 ),
                 Padding(padding: EdgeInsets.all(8.0)),
                 GestureDetector(
                   child: Text('Select from Gallery'),
+                  onTap: () async {
+                    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+                    _uploadAvatar(context, image);
+                  },
                 ),
               ],
             )
