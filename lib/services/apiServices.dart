@@ -86,6 +86,29 @@ abstract class ApiServices {
     );
   }
 
+  static Future<http.StreamedResponse> upload(
+    String apiEndpoint,
+    {
+      Map<String, String> apiHeaders,
+      Map<String, dynamic> apiFile,
+      String apiRequest = 'POST',
+    }
+  ) async {
+    final String url = '$_apiRoot$apiEndpoint';
+    final Uri uri = _buildUri(url);
+    final Map<String, String> headers = await _buildApiHeaders(apiHeaders: apiHeaders);
+    final http.MultipartFile upload = await http.MultipartFile.fromPath(
+      apiFile['param'] ?? 'upload',
+      apiFile['file'].path
+    );
+
+    http.MultipartRequest request = http.MultipartRequest(apiRequest, uri);
+    request.headers.addAll(headers);
+    request.files.add(upload);
+
+    return request.send();
+  }
+
   static Future<http.Response> delete(
     String apiEndpoint,
     {
