@@ -52,7 +52,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       return PlayerCard(player: snapshot.data);
                     } else if (snapshot.hasError) {
                       return ErrorDisplay(
-                        errorMessage: 'Could not load game data',
+                        errorMessage: 'Could not load player data',
                       );
                     }
 
