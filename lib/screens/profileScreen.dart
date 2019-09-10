@@ -68,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
         return Scaffold(
           appBar: AppBar(
-            title: Text(player.nickname),
+            title: Text('My Profile'),
           ),
           bottomNavigationBar: BottomNavigationBar(
             onTap: (int index) {
@@ -78,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 }
                 return;
                 case 1: {
-                  print("edit");
+                  Navigator.pushNamed(context, '/profile/edit');
                 }
                 return;
               }
