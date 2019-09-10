@@ -1,7 +1,8 @@
 // flutter
 import 'dart:async';
-import 'package:flutter/foundation.dart';
+import 'dart:io';
 // dependencies
+import 'package:flutter/foundation.dart';
 // app
 import 'package:game_scoreboard/data/storedUser.dart';
 import 'package:game_scoreboard/models/player.dart';
@@ -43,6 +44,20 @@ class CurrentPlayer with ChangeNotifier {
     _status = Status.Unauthenticated;
     player = null;
     notifyListeners();
+  }
+
+  Future<void> uploadAvatar(
+    {
+      File file,
+    }
+  ) async {
+    await player.upload(
+      param: 'avatar',
+      file: file,
+    ).then((Player _player) {
+      player = _player;
+      notifyListeners();
+    });
   }
 
   Future<bool> renew() async {
