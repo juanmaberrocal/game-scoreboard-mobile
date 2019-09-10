@@ -1,6 +1,7 @@
 // flutter
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 // dependencies
 import 'package:json_annotation/json_annotation.dart';
 // app
@@ -22,27 +23,77 @@ class Player {
   @JsonKey(name: 'last_name')
   final String lastName;
   final String nickname;
+  @JsonKey(name: 'avatar_url')
+  final String avatarUrl;
 
   Player({
     this.id, this.email, this.firstName, this.lastName, this.nickname,
+    this.avatarUrl,
   });
 
   static String _apiPath = 'v1/players';
 
-  Future<Player> fetch(int id) async {
-    final String url = '$_apiPath/$id';
-    Player player;
+  Map<String, dynamic> _parseResponseString({
+    String responseString,
+    int responseCode,
+    List<int> validResponseCodes = const [200, 201, 204]
+  }) {
+    final responseJson = json.decode(responseString);
 
-    final response = await ApiServices.get(url);
+    if (validResponseCodes.contains(responseCode)) {
+      final responseData = responseJson['data'];
+      return responseData;
+    } else {
+      final responseError = responseJson['error'] ?? 'Oops Something Went Wrong';
+      throw(responseError);
+    }
+  }
 
-    final responseJson = json.decode(response.body);
-    final responseData = responseJson['data'];
-
+  Player _parseResponseDataToPlayer({
+    Map<String, dynamic> responseData
+  }) {
     Map<String, dynamic> playerData = {};
     playerData.addAll({'id': responseData['id']});
     playerData.addAll(responseData['attributes']);
 
-    player = Player.fromJson(playerData);
+    Player player = Player.fromJson(playerData);
+    return player;
+  }
+
+  Future<Player> fetch(int id) async {
+    final String url = '$_apiPath/$id';
+    final response = await ApiServices.get(url);
+    final Map<String, dynamic> responseData = _parseResponseString(
+      responseString: response.body,
+      responseCode: response.statusCode,
+    );
+    final Player player = _parseResponseDataToPlayer(responseData: responseData);
+
+    return player;
+  }
+
+  Future<Player> upload(
+    {
+      String param,
+      File file,
+    }
+  ) async {
+    final String url = "$_apiPath/$id";
+    final response = await ApiServices.upload(
+      url,
+      apiFile: {
+        'param': "player[$param]",
+        'file': file,
+      },
+      apiRequest: 'PUT',
+    );
+    final String responseString = await response.stream.bytesToString();
+    final Map<String, dynamic> responseData = _parseResponseString(
+      responseString: responseString,
+      responseCode: response.statusCode,
+    );
+    final Player player = _parseResponseDataToPlayer(responseData: responseData);
+
     return player;
   }
 
@@ -50,8 +101,10 @@ class Player {
     final String url = '$_apiPath/$id/standings';
 
     final response = await ApiServices.get(url);
-    final responseJson = json.decode(response.body);
-    final responseData = responseJson['data'];
+    final Map<String, dynamic> responseData = _parseResponseString(
+      responseString: response.body,
+      responseCode: response.statusCode,
+    );
 
     return responseData['attributes']['standings'];
   }
