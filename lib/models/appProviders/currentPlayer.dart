@@ -46,6 +46,11 @@ class CurrentPlayer with ChangeNotifier {
     notifyListeners();
   }
 
+  void refreshCurrentPlayer(Player _player) {
+    player = _player;
+    notifyListeners();
+  }
+
   Future<void> uploadAvatar(
     {
       File file,
