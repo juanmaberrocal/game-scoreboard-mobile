@@ -72,6 +72,21 @@ class Player {
     return player;
   }
 
+  Future<Player> update() async {
+    final String url = "$_apiPath/$id";
+    final response = await ApiServices.put(
+      url,
+      apiBody: toJson(),
+    );
+    final Map<String, dynamic> responseData = _parseResponseString(
+      responseString: response.body,
+      responseCode: response.statusCode,
+    );
+    final Player player = _parseResponseDataToPlayer(responseData: responseData);
+
+    return player;
+  }
+
   Future<Player> upload(
     {
       String param,
