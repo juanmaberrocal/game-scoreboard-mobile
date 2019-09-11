@@ -13,7 +13,6 @@ import 'package:game_scoreboard/screens/splashScreen.dart';
 import 'package:game_scoreboard/screens/loginScreen.dart';
 import 'package:game_scoreboard/screens/dashboardScreen.dart';
 import 'package:game_scoreboard/screens/profileScreen.dart';
-import 'package:game_scoreboard/screens/profileEditScreen.dart';
 
 Future<Null> main() async {
   // This captures errors reported by the Flutter framework.
@@ -68,7 +67,6 @@ class GameScoreboard extends StatelessWidget {
         '/login': (context) => LoginScreen(),
         '/dashboard': (context) => DashboardScreen(),
         '/profile': (context) => ProfileScreen(),
-        '/profile/edit': (context) => ProfileEditScreen(),
       },
       home: SplashScreen(),
     );
