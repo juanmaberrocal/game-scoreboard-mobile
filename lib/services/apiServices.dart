@@ -86,6 +86,24 @@ abstract class ApiServices {
     );
   }
 
+  static Future<http.Response> put(
+      String apiEndpoint,
+      {
+        Map<String, String> apiHeaders,
+        Map<String, dynamic> apiBody,
+      }
+  ) async {
+    final String url = '$_apiRoot$apiEndpoint';
+    final Map<String, String> headers = await _buildApiHeaders(apiHeaders: apiHeaders);
+    final Map<String, dynamic> body = _buildBody(apiBody: apiBody);
+
+    return http.put(
+      url,
+      headers: headers,
+      body: json.encode(body),
+    );
+  }
+
   static Future<http.StreamedResponse> upload(
     String apiEndpoint,
     {
