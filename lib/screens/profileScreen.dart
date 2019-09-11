@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 // app
 import 'package:game_scoreboard/models/appProviders/currentPlayer.dart';
 import 'package:game_scoreboard/models/player.dart';
+import 'package:game_scoreboard/screens/playerEditScreen.dart';
 import 'package:game_scoreboard/widgets/playerCard.dart';
 
 /*
@@ -78,7 +79,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 }
                 return;
                 case 1: {
-                  Navigator.pushNamed(context, '/profile/edit');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PlayerEditScreen(
+                        player: player,
+                        pageTitle: 'Edit Profile',
+                        successCallback: (Player player) {
+                          Provider.of<CurrentPlayer>(context, listen: false).refreshCurrentPlayer(player);
+                        },
+                      ),
+                    ),
+                  );
                 }
                 return;
               }
