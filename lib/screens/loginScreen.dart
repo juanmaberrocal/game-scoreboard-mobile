@@ -17,7 +17,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   // Login form identifier key
-  final _formKey = GlobalKey<FormState>();
+  final _loginFormKey = GlobalKey<FormState>();
   final FocusNode _passwordFocusNode = FocusNode();
 
   // Create a text controller and use it to retrieve the current value
@@ -75,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               Form(
-                key: _formKey,
+                key: _loginFormKey,
                 child: Column(
                   children: <Widget>[
                     Container(
@@ -144,7 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: style.copyWith(color: Colors.white, fontWeight: FontWeight.bold)
                         ),
                         onPressed: () {
-                          if (_formKey.currentState.validate()) {
+                          if (_loginFormKey.currentState.validate()) {
                             Provider.of<CurrentPlayer>(context, listen: false).logIn(
                               emailController.text,
                               passwordController.text,
