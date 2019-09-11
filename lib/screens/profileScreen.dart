@@ -19,13 +19,19 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  // Profile scaffold identifier key
+  final _profileScaffoldKey = GlobalKey<ScaffoldState>();
+
   void _uploadAvatar(BuildContext context, image) {
     // ensure user didn't cancel out
     if (image != null) {
       Navigator.pop(context);
       Provider.of<CurrentPlayer>(context, listen: false).uploadAvatar(
         file: image,
-      );
+      ).catchError((error) {
+        final snackError = SnackBar(content: Text('There was an error updating your avatar!'),);
+        _profileScaffoldKey.currentState.showSnackBar(snackError);
+      });
     }
   }
 
@@ -68,6 +74,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         final Player player = currentPlayer.player;
 
         return Scaffold(
+          key: _profileScaffoldKey,
           appBar: AppBar(
             title: Text('My Profile'),
           ),
