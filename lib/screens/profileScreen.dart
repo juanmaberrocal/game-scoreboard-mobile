@@ -9,7 +9,7 @@ import 'package:game_scoreboard/models/appProviders/currentPlayer.dart';
 import 'package:game_scoreboard/models/player.dart';
 import 'package:game_scoreboard/screens/playerEditScreen.dart';
 import 'package:game_scoreboard/widgets/playerCard.dart';
-import 'package:game_scoreboard/widgets/gsSnackBar.dart';
+import 'package:game_scoreboard/helpers/gsSnackBar.dart';
 
 /*
 Screen: Profile
