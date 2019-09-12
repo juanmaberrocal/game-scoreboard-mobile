@@ -50,16 +50,45 @@ class _CardBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 50.0),
-      padding: EdgeInsets.all(20.0),
+    return Padding(
+      padding: EdgeInsets.fromLTRB(20.0, 60.0, 20.0, 20.0),
       child: Column(
         children: <Widget>[
-          Text(
-            "${player.firstName} ${player.lastName}",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          Text(player.email),
+          LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+            return SizedBox(
+              width: constraints.maxWidth * 0.75,
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    "${player.firstName} ${player.lastName}",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(player.email),
+                ],
+              ),
+            );
+          }),
+          Padding(padding: EdgeInsets.all(18.0),),
+          LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+            return Column(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    SizedBox(
+                      width: constraints.maxWidth * 0.33,
+                      child: Text(
+                        'Nickname: ',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(player.nickname),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          }),
         ],
       ),
     );
