@@ -36,7 +36,39 @@ abstract class AuthorizationServices {
     }
   }
 
-  static Future<Map<String, dynamic>> logIn(String email, String password) async {
+  static Future<Map<String, dynamic>> changePassword(
+    String currentPassword,
+    String password,
+    String passwordConfirmation
+  ) async {
+    final String apiUrl = 'update_password';
+    final Map<String, dynamic> apiBody = {
+      'player': {
+        'current_password': currentPassword,
+        'password': password,
+        'password_confirmation': passwordConfirmation,
+      },
+    };
+
+    // post password update request
+    final response = await ApiServices.post(
+      apiUrl,
+      apiBody: apiBody,
+    );
+
+    if (response.statusCode == 200) {
+      // If server returns an OK response, parse the JSON.
+      return _tokenBodyResponse(response);
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('Oops, something went wrong');
+    }
+  }
+
+  static Future<Map<String, dynamic>> logIn(
+    String email,
+    String password
+  ) async {
     final String apiUrl = 'login';
     final Map<String, dynamic> apiBody = {
       'player': {
