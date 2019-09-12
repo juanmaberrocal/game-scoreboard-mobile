@@ -184,7 +184,7 @@ class _PlayerAvatar extends StatelessWidget {
 
     return CircleAvatar(
       radius: 50.0,
-      backgroundColor: getColorFromString(nickname),
+      backgroundColor: ColorSelector().fromString(nickname),
       child: (
           Text("$firstInitial$lastInitial")
       ),

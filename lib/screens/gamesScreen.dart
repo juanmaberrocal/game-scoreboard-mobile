@@ -77,7 +77,7 @@ class _GameGridElement extends StatelessWidget {
               Center(
                 child: CircleAvatar(
                   radius: 30,
-                  backgroundColor: getColorFromString(game.name),
+                  backgroundColor: ColorSelector().fromString(game.name),
                   child: Text(
                     game.name[0],
                   ),

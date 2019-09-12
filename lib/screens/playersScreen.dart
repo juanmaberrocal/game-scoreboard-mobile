@@ -67,7 +67,7 @@ class _PlayerListElement extends StatelessWidget {
         },
         child: ListTile(
           leading: CircleAvatar(
-            backgroundColor: getColorFromString(player.nickname),
+            backgroundColor: ColorSelector().fromString(player.nickname),
             child: Text("${player.nickname[0]}"),
           ),
           title: Text(player.nickname),

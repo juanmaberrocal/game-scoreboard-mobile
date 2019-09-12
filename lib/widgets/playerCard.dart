@@ -112,7 +112,7 @@ class _CardAvatar extends StatelessWidget {
 
     return CircleAvatar(
       radius: radius,
-      backgroundColor: getColorFromString(player.nickname),
+      backgroundColor: ColorSelector().fromString(player.nickname),
       child: (
         player.avatarUrl == null ? Text(initials) : null
       ),
