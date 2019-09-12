@@ -86,6 +86,29 @@ class CurrentPlayer with ChangeNotifier {
     return isRenewed;
   }
 
+  Future<void> changePassword(
+    String currentPassword,
+    String password,
+    String passwordConfirmation
+  ) async {
+    _status = Status.Authenticating;
+
+    await AuthorizationServices.changePassword(
+      currentPassword,
+      password,
+      passwordConfirmation,
+    ).then((Map<String, dynamic> changePasswordResponse) {
+      // if sign in succeeded
+      // store user token and set player record
+      _parseResponse(changePasswordResponse);
+    }).catchError((err) {
+      // if sign in failed
+      // ensure all stored data is cleared
+      _clearCurrentPlayer();
+      throw err;
+    });
+  }
+
   Future<void> logIn(String email, String password) async {
     _status = Status.Authenticating;
 
