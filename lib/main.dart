@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 // dependencies
 // app
 import 'package:game_scoreboard/env/env.dart';
-import 'package:game_scoreboard/data/storedUser.dart';
 import 'package:game_scoreboard/helpers/errorLog.dart';
 import 'package:game_scoreboard/models/appProviders/currentPlayer.dart';
 import 'package:game_scoreboard/models/appProviders/gamesLibrary.dart';
@@ -36,10 +35,7 @@ Future<Null> main() async {
   // from the `FlutterError` handler.
   runZoned<Future<Null>>(() async {
     BuildFlavor buildFlavor = isInDebugMode ? BuildFlavor.development : BuildFlavor.production;
-    await BuildEnvironment.init( // ignore: await_only_futures
-        flavor: buildFlavor
-    );
-    await StoredUser.init();
+    await env.loadEnv(flavor: buildFlavor);
 
     runApp(
       MultiProvider(

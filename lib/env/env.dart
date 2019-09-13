@@ -1,49 +1,66 @@
 // flutter
-// import 'dart:async' show Future;
 import 'dart:convert';
+import 'package:async/async.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:meta/meta.dart';
 // dependencies
-import 'package:json_annotation/json_annotation.dart';
 // app
-
-// serializer
-part 'env.g.dart';
 
 enum BuildFlavor { production, development, staging }
 
-BuildEnvironment get env => _env;
-BuildEnvironment _env;
+BuildEnvironment get env => BuildEnvironment();
 
 /*
 Singleton: BuildEnvironment
+Load environment configurations from file
+  based on specified flavor
 */
-@JsonSerializable(nullable: false, createToJson: false)
 class BuildEnvironment {
-  @JsonKey(fromJson: _stringToFlavor)
-  final BuildFlavor environment;
-  final String apiRoot;
-  final String rollbarToken;
+  /// Singleton definition
+  static final BuildEnvironment _singleton = BuildEnvironment._internal();
+  factory BuildEnvironment() => _singleton;
+  BuildEnvironment._internal();
 
-  /// Sets up the top-level [env] getter on the first call only.
-  static void init({@required flavor,}) async {
-    final String envFile = _flavorToString(flavor);
-    final String envString = await rootBundle.loadString('lib/env/$envFile.json');
-    final Map<String, dynamic> envJson = json.decode(envString);
+  /// Singleton members
+  static Map<String, dynamic> _env;
+  final _envJsonMemoizer = AsyncMemoizer<String>();
 
-    _env ??= BuildEnvironment._init(envJson);
+  Future<Map<String, dynamic>> loadEnv({
+    @required flavor,
+  }) async {
+    if (_env != null) {
+      return _env;
+    }
+
+    // if env still not loaded
+    final String _envFile = _flavorToString(flavor);
+    final String _envString = await _envJsonMemoizer.runOnce(() async {
+      return await rootBundle.loadString('lib/env/$_envFile.json');
+    });
+
+    return _env = jsonDecode(_envString);
   }
 
-  BuildEnvironment({
-    this.environment,
-    this.apiRoot,
-    this.rollbarToken,
-  });
+  String get environment {
+    _checkLoaded();
+    return _env['environment'];
+  }
 
-  factory BuildEnvironment._init(Map<String, dynamic> json) => _$BuildEnvironmentFromJson(json);
+  String get apiRoot {
+    _checkLoaded();
+    return _env['apiRoot'];
+  }
 
-  static BuildFlavor _stringToFlavor(String flavor) {
-    return BuildFlavor.values.firstWhere((e) => e.toString() == 'BuildFlavor.' + flavor);
+  String get rollbarToken {
+    _checkLoaded();
+    return _env['rollbarToken'];
+  }
+
+  ///
+  void _checkLoaded() {
+    if (_env.isEmpty) {
+      throw Exception('Environment not yet loaded!');
+    }
   }
 
   static String _flavorToString(BuildFlavor flavor) {
@@ -51,12 +68,9 @@ class BuildEnvironment {
       case BuildFlavor.production: {
         return 'prod';
       }
-      break;
-
       default: {
         return 'dev';
       }
-      break;
     }
   }
 }
