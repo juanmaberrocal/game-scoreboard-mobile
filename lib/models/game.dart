@@ -39,7 +39,7 @@ class Game {
     final String url = '$_apiPath/$id';
     Game game;
 
-    final response = await ApiServices.get(url);
+    final response = await api.get(url);
 
     final responseJson = json.decode(response.body);
     final responseData = responseJson['data'];
@@ -55,7 +55,7 @@ class Game {
   Future<List<dynamic>> standings(int id) async {
     final String url = '$_apiPath/$id/standings';
 
-    final response = await ApiServices.get(url);
+    final response = await api.get(url);
     final responseJson = json.decode(response.body);
     final responseData = responseJson['data'];
 

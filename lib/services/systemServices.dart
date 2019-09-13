@@ -9,7 +9,7 @@ abstract class SystemServices {
     final String apiUrl = 'ping';
 
     // send ping request
-    final response = await ApiServices.get(
+    final response = await api.get(
       apiUrl,
     );
 

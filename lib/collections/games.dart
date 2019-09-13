@@ -20,7 +20,7 @@ class Games {
   }) async {
     List<Game> games = [];
 
-    final response = await ApiServices.get(_apiPath, apiBody: queryParams);
+    final response = await api.get(_apiPath, apiBody: queryParams);
 
     final responseJson = json.decode(response.body);
     final responseData = responseJson['data'];

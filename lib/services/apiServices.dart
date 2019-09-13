@@ -7,19 +7,29 @@ import 'package:http/http.dart' as http;
 import 'package:game_scoreboard/env/env.dart';
 import 'package:game_scoreboard/data/storedUser.dart';
 
+ApiServices get api => ApiServices();
+
 /*
 Service: API
-*/
-abstract class ApiServices {
-  static String _apiRoot = env.apiRoot;
-  static Map<String, String> _apiBaseHeaders = {
+ */
+class ApiServices {
+  /// Singleton definition
+  static final ApiServices _singleton = ApiServices._internal();
+  factory ApiServices() => _singleton;
+  ApiServices._internal() {
+    _apiRoot = env.apiRoot;
+  }
+
+  /// Singleton members
+  final Map<String, String> _apiBaseHeaders = {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
   };
-  static Map<String, dynamic> _apiBaseBody = {};
+  final Map<String, dynamic> _apiBaseBody = {};
+  String _apiRoot;
 
-  static Future<Map<String, String>> _buildApiHeaders({
-    Map<String, String> apiHeaders
+  Future<Map<String, String>> _buildApiHeaders({
+    Map<String, String> apiHeaders,
   }) async {
     Map<String, String> headers = new Map.from(_apiBaseHeaders);
     String authToken = await storedUser.getToken();
@@ -28,12 +38,10 @@ abstract class ApiServices {
     return headers;
   }
 
-  static Uri _buildUri(
+  Uri _buildUri(
     String apiPath,
-    {
-      Map<String, dynamic> apiQuery
-    }
-  ) {
+    {Map<String, dynamic> apiQuery,
+  }) {
     Map<String, dynamic> body = new Map.from(_apiBaseBody);
     apiQuery == null ? null : body.addAll(apiQuery);
 
@@ -43,15 +51,15 @@ abstract class ApiServices {
     return uri;
   }
 
-  static Map<String, dynamic> _buildBody({
-    Map<String, dynamic> apiBody
+  Map<String, dynamic> _buildBody({
+    Map<String, dynamic> apiBody,
   }) {
     Map<String, dynamic> body = new Map.from(_apiBaseBody);
     apiBody == null ? null : body.addAll(apiBody);
     return body;
   }
 
-  static Future<http.Response> get(
+  Future<http.Response> get(
     String apiEndpoint,
     {
       Map<String, String> apiHeaders,
@@ -68,7 +76,7 @@ abstract class ApiServices {
     );
   }
 
-  static Future<http.Response> post(
+  Future<http.Response> post(
     String apiEndpoint,
     {
       Map<String, String> apiHeaders,
@@ -86,12 +94,12 @@ abstract class ApiServices {
     );
   }
 
-  static Future<http.Response> put(
-      String apiEndpoint,
-      {
-        Map<String, String> apiHeaders,
-        Map<String, dynamic> apiBody,
-      }
+  Future<http.Response> put(
+    String apiEndpoint,
+    {
+      Map<String, String> apiHeaders,
+      Map<String, dynamic> apiBody,
+    }
   ) async {
     final String url = '$_apiRoot$apiEndpoint';
     final Map<String, String> headers = await _buildApiHeaders(apiHeaders: apiHeaders);
@@ -104,7 +112,7 @@ abstract class ApiServices {
     );
   }
 
-  static Future<http.StreamedResponse> upload(
+  Future<http.StreamedResponse> upload(
     String apiEndpoint,
     {
       Map<String, String> apiHeaders,
@@ -116,8 +124,8 @@ abstract class ApiServices {
     final Uri uri = _buildUri(url);
     final Map<String, String> headers = await _buildApiHeaders(apiHeaders: apiHeaders);
     final http.MultipartFile upload = await http.MultipartFile.fromPath(
-      apiFile['param'] ?? 'upload',
-      apiFile['file'].path
+        apiFile['param'] ?? 'upload',
+        apiFile['file'].path
     );
 
     http.MultipartRequest request = http.MultipartRequest(apiRequest, uri);
@@ -127,7 +135,7 @@ abstract class ApiServices {
     return request.send();
   }
 
-  static Future<http.Response> delete(
+  Future<http.Response> delete(
     String apiEndpoint,
     {
       Map<String, String> apiHeaders,

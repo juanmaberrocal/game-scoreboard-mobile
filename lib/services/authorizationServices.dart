@@ -23,7 +23,7 @@ abstract class AuthorizationServices {
     final String apiUrl = 'renew';
     
     // post renew request
-    final response = await ApiServices.get(
+    final response = await api.get(
       apiUrl,
     );
 
@@ -51,7 +51,7 @@ abstract class AuthorizationServices {
     };
 
     // post password update request
-    final response = await ApiServices.post(
+    final response = await api.post(
       apiUrl,
       apiBody: apiBody,
     );
@@ -78,7 +78,7 @@ abstract class AuthorizationServices {
     };
 
     // post login request
-    final response = await ApiServices.post(
+    final response = await api.post(
       apiUrl,
       apiBody: apiBody
     );
@@ -96,7 +96,7 @@ abstract class AuthorizationServices {
     final String apiUrl = 'logout';
 
     // post logout request
-    final response = await ApiServices.delete(
+    final response = await api.delete(
       apiUrl,
     );
     

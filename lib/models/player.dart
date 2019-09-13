@@ -62,7 +62,7 @@ class Player {
 
   Future<Player> fetch(int id) async {
     final String url = '$_apiPath/$id';
-    final response = await ApiServices.get(url);
+    final response = await api.get(url);
     final Map<String, dynamic> responseData = _parseResponseString(
       responseString: response.body,
       responseCode: response.statusCode,
@@ -74,7 +74,7 @@ class Player {
 
   Future<Player> update() async {
     final String url = "$_apiPath/$id";
-    final response = await ApiServices.put(
+    final response = await api.put(
       url,
       apiBody: toJson(),
     );
@@ -94,7 +94,7 @@ class Player {
     }
   ) async {
     final String url = "$_apiPath/$id";
-    final response = await ApiServices.upload(
+    final response = await api.upload(
       url,
       apiFile: {
         'param': "player[$param]",
@@ -115,7 +115,7 @@ class Player {
   Future<List<dynamic>> standings(int id) async {
     final String url = '$_apiPath/$id/standings';
 
-    final response = await ApiServices.get(url);
+    final response = await api.get(url);
     final Map<String, dynamic> responseData = _parseResponseString(
       responseString: response.body,
       responseCode: response.statusCode,
