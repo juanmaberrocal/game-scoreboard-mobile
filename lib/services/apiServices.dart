@@ -22,7 +22,7 @@ abstract class ApiServices {
     Map<String, String> apiHeaders
   }) async {
     Map<String, String> headers = new Map.from(_apiBaseHeaders);
-    String authToken = await StoredUser.getToken();
+    String authToken = await storedUser.getToken();
     authToken == null ? null : headers.addAll({'Authorization': 'Bearer $authToken'});
     apiHeaders == null ? null : headers.addAll(apiHeaders);
     return headers;

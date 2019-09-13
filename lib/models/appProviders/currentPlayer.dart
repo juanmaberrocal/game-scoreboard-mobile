@@ -32,7 +32,7 @@ class CurrentPlayer with ChangeNotifier {
   }
 
   void _setCurrentPlayer(String token, Player _player) {
-    StoredUser.setToken(token);
+    storedUser.setToken(token);
 
     _status = Status.Authenticated;
     player = _player;
@@ -40,7 +40,7 @@ class CurrentPlayer with ChangeNotifier {
   }
 
   void _clearCurrentPlayer() {
-    StoredUser.clear();
+    storedUser.clear();
     _status = Status.Unauthenticated;
     player = null;
     notifyListeners();
@@ -66,7 +66,7 @@ class CurrentPlayer with ChangeNotifier {
   }
 
   Future<bool> renew() async {
-    final String token = await StoredUser.getToken();
+    final String token = await storedUser.getToken();
     bool isRenewed;
 
     if (token == null){
