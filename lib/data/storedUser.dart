@@ -10,7 +10,7 @@ StoredUser get storedUser => StoredUser();
 Singleton: StoredUser
 Handle all SharedPreference logic to
   get/set/clear stored data
-*/
+ */
 class StoredUser {
   /// Singleton definition
   static final StoredUser _singleton = StoredUser._internal();

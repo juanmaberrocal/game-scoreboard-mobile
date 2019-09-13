@@ -14,7 +14,7 @@ BuildEnvironment get env => BuildEnvironment();
 Singleton: BuildEnvironment
 Load environment configurations from file
   based on specified flavor
-*/
+ */
 class BuildEnvironment {
   /// Singleton definition
   static final BuildEnvironment _singleton = BuildEnvironment._internal();
