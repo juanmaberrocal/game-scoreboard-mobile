@@ -8,9 +8,8 @@ Logger get logger => Logger();
 
 /*
 Singleton: Logger
-Handle all SharedPreference logic to
-  get/set/clear stored data
-*/
+Handle all logging logic to display errors and build rollbar reports
+ */
 class Logger {
   /// Singleton definition
   static final Logger _singleton = Logger._internal();
