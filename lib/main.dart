@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 // dependencies
 // app
 import 'package:game_scoreboard/env/env.dart';
-import 'package:game_scoreboard/helpers/errorLog.dart';
+import 'package:game_scoreboard/helpers/logger.dart';
 import 'package:game_scoreboard/models/appProviders/currentPlayer.dart';
 import 'package:game_scoreboard/models/appProviders/gamesLibrary.dart';
 import 'package:game_scoreboard/models/appProviders/playersLibrary.dart';
@@ -17,7 +17,7 @@ import 'package:game_scoreboard/screens/profileScreen.dart';
 Future<Null> main() async {
   // This captures errors reported by the Flutter framework.
   FlutterError.onError = (FlutterErrorDetails details) async {
-    if (isInDebugMode) {
+    if (env.debug) {
       // In development mode simply print to console.
       FlutterError.dumpErrorToConsole(details);
     } else {
@@ -34,7 +34,7 @@ Future<Null> main() async {
   // including those thrown from [Timer]s, microtasks, I/O, and those forwarded
   // from the `FlutterError` handler.
   runZoned<Future<Null>>(() async {
-    BuildFlavor buildFlavor = isInDebugMode ? BuildFlavor.development : BuildFlavor.production;
+    BuildFlavor buildFlavor = env.debug ? BuildFlavor.development : BuildFlavor.production;
     await env.loadEnv(flavor: buildFlavor);
 
     runApp(
@@ -48,7 +48,7 @@ Future<Null> main() async {
       ),
     );
   }, onError: (error, stackTrace) async {
-    await reportError(error, stackTrace);
+    await logger.error(error, stackTrace);
   });
 }
 

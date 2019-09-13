@@ -19,11 +19,20 @@ class BuildEnvironment {
   /// Singleton definition
   static final BuildEnvironment _singleton = BuildEnvironment._internal();
   factory BuildEnvironment() => _singleton;
-  BuildEnvironment._internal();
+  BuildEnvironment._internal() {
+    // Assume you're in production mode.
+    debug = false;
+
+    // Assert expressions are only evaluated during development. They are ignored
+    // in production. Therefore, this code only sets `inDebugMode` to true
+    // in a development environment.
+    assert(debug = true);
+  }
 
   /// Singleton members
-  static Map<String, dynamic> _env;
   final _envJsonMemoizer = AsyncMemoizer<String>();
+  Map<String, dynamic> _env;
+  bool debug;
 
   Future<Map<String, dynamic>> loadEnv({
     @required flavor,
