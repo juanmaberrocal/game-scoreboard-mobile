@@ -1,11 +1,11 @@
 // flutter
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // dependencies
 // app
 
 /*
 Helper: ColorSelector
+Class holding several methods to help determine colors programatically
  */
 class ColorSelector {
   Color fromString(String string) {
