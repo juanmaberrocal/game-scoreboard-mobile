@@ -27,7 +27,7 @@ class PlayerEditScreen extends StatefulWidget {
 }
 
 class _PlayerEditScreenState extends State<PlayerEditScreen> {
-  // Login form identifier key
+  // Player form identifier key
   final _playerFormKey = GlobalKey<FormState>();
 
   // Create a text controller and use it to retrieve the current value
