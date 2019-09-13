@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 // dependencies
 // app
+import 'package:game_scoreboard/screens/addMatchScreen.dart';
 import 'package:game_scoreboard/screens/gamesScreen.dart';
 import 'package:game_scoreboard/screens/homeScreen.dart';
 import 'package:game_scoreboard/screens/playersScreen.dart';
@@ -53,7 +54,14 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
         ]
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddMatchScreen()
+            ),
+          );
+        },
         child: Icon(Icons.add),
       ),
       controller: _tabController,
