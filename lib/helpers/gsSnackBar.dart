@@ -4,6 +4,14 @@ import 'package:flutter/material.dart';
 // dependencies
 // app
 
+/*
+Helper: GSSnackBar
+Wrapper class to build success/error snackbar widgets
+  and display them on the defined scaffold
+
+ScaffoldState screenScaffold: context scaffold
+  where snackbar will be displayed [required]
+ */
 class GSSnackBar {
   GSSnackBar({
     @required this.screenScaffold
