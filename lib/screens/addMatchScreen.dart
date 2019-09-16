@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // dependencies
 // app
-import 'package:game_scoreboard/collections/matches.dart';
+import 'package:game_scoreboard/helpers/gsSnackBar.dart';
 import 'package:game_scoreboard/models/appProviders/gamesLibrary.dart';
 import 'package:game_scoreboard/models/appProviders/playersLibrary.dart';
 import 'package:game_scoreboard/models/game.dart';
@@ -37,7 +37,10 @@ class AddMatchScreen extends StatefulWidget {
 }
 
 class _AddMatchScreenState extends State<AddMatchScreen> {
-  // Player form identifier key
+  // Match scaffold identifier key
+  final _matchScaffoldKey = GlobalKey<ScaffoldState>();
+
+  // Match form identifier key
   final _matchFormKey = GlobalKey<FormState>();
 
   @override
@@ -54,7 +57,7 @@ class _AddMatchScreenState extends State<AddMatchScreen> {
     playersList = Provider.of<PlayersLibrary>(context, listen: false).players.map((Player player) {
       return DropdownMenuItem(
         child: Text(player.nickname),
-        value: player.nickname,
+        value: player.id,
       );
     }).toList();
 
@@ -70,18 +73,16 @@ class _AddMatchScreenState extends State<AddMatchScreen> {
   List<Widget> playerSelects = [];
 
   int _selectedGame;
-  List<Map<String, bool>> _selectedPlayers = [];
+  Map<int, bool> _selectedPlayers = {};
 
   bool _canAddPlayer() {
     return playerSelects.length == _selectedPlayers.length;
   }
 
-  List<DropdownMenuItem<String>> _filterPlayersList() {
-    final List<String> usedPlayers = _selectedPlayers.map((player) {
-      return player.keys.first;
-    }).toList();
+  List<DropdownMenuItem<int>> _filterPlayersList() {
+    final List<int> usedPlayers = _selectedPlayers.keys.toList();
 
-    final List<DropdownMenuItem<String>> filteredPlayers = List.from(playersList)
+    final List<DropdownMenuItem<int>> filteredPlayers = List.from(playersList)
       ..removeWhere((player) {
         return usedPlayers.contains(player.value);
       });
@@ -94,6 +95,7 @@ class _AddMatchScreenState extends State<AddMatchScreen> {
     return _AddMatchData(
       data: this,
       child: Scaffold(
+        key: _matchScaffoldKey,
         appBar: AppBar(
           title: Text("New Match"),
           automaticallyImplyLeading: false,
@@ -106,7 +108,14 @@ class _AddMatchScreenState extends State<AddMatchScreen> {
               }
               return;
               case 1: {
-
+                final Match match = Match(gameId: _selectedGame, results: _selectedPlayers);
+                match.create().then((response) {
+                  Navigator.pop(context);
+                }).catchError((error) {
+                  GSSnackBar(screenScaffold: _matchScaffoldKey.currentState)
+                    ..error(error.toString());
+                  throw error;
+                });
               }
               return;
             }
@@ -201,7 +210,7 @@ class PlayerSelect extends StatefulWidget {
 }
 
 class _PlayerSelectState extends State<PlayerSelect> {
-  String _selectedPlayer;
+  int _selectedPlayer;
   bool _winner = false;
 
   @override
@@ -217,9 +226,7 @@ class _PlayerSelectState extends State<PlayerSelect> {
             onTap: () {
               final _AddMatchScreenState state = AddMatchScreen.of(context);
               state.setState(() {
-                if (state._selectedPlayers.length > widget.listIndex) {
-                  state._selectedPlayers.removeAt(widget.listIndex);
-                }
+                state._selectedPlayers.remove(_selectedPlayer);
                 state.playerSelects.removeAt(widget.listIndex);
               });
             },
@@ -231,20 +238,15 @@ class _PlayerSelectState extends State<PlayerSelect> {
             hint: Text('Player'),
             items: widget.playerList,
             value: _selectedPlayer,
-            onChanged: (String player) {
+            onChanged: (int player) {
               final _AddMatchScreenState state = AddMatchScreen.of(context);
-              final Map<String, bool> selectedPlayer = {}
-                ..update(player, (_) => _winner, ifAbsent: () => _winner);
 
               setState(() {
                 _selectedPlayer = player;
               });
 
               state.setState(() {
-                if (state._selectedPlayers.length > widget.listIndex) {
-                  state._selectedPlayers.removeAt(widget.listIndex);
-                }
-                state._selectedPlayers.insert(widget.listIndex, selectedPlayer);
+                state._selectedPlayers.update(player, (_) => _winner, ifAbsent: () => _winner);
               });
             },
             isExpanded: true,
@@ -255,18 +257,13 @@ class _PlayerSelectState extends State<PlayerSelect> {
             value: _winner,
             onChanged: _selectedPlayer == null ? null : (bool winner) {
               final _AddMatchScreenState state = AddMatchScreen.of(context);
-              final Map<String, bool> selectedPlayer = {}
-                ..update(_selectedPlayer, (_) => winner, ifAbsent: () => winner);
 
               setState(() {
                 _winner = winner;
               });
 
               state.setState(() {
-                if (state._selectedPlayers.length > widget.listIndex) {
-                  state._selectedPlayers.removeAt(widget.listIndex);
-                }
-                state._selectedPlayers.insert(widget.listIndex, selectedPlayer);
+                state._selectedPlayers.update(_selectedPlayer, (_) => winner, ifAbsent: () => winner);
               });
             },
           ),
