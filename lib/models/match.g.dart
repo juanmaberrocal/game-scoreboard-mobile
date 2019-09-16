@@ -8,16 +8,19 @@ part of 'match.dart';
 
 Match _$MatchFromJson(Map<String, dynamic> json) {
   return Match(
-    id: Match._stringToInt(json['id'] as String),
+    id: JsonModel.stringToInt(json['id'] as String),
     matchId: json['match_id'] as int,
     gameId: json['game_id'] as int,
     winner: json['winner'] as bool,
+    results: (json['results'] as Map<String, dynamic>)?.map(
+      (k, e) => MapEntry(int.parse(k), e as bool),
+    ),
   );
 }
 
 Map<String, dynamic> _$MatchToJson(Match instance) {
   final val = <String, dynamic>{
-    'id': Match._stringFromInt(instance.id),
+    'id': JsonModel.stringFromInt(instance.id),
     'match_id': instance.matchId,
     'game_id': instance.gameId,
   };
@@ -29,5 +32,7 @@ Map<String, dynamic> _$MatchToJson(Match instance) {
   }
 
   writeNotNull('winner', instance.winner);
+  writeNotNull(
+      'results', instance.results?.map((k, e) => MapEntry(k.toString(), e)));
   return val;
 }
