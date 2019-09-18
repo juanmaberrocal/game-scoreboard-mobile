@@ -15,6 +15,10 @@ import 'package:game_scoreboard/screens/dashboardScreen.dart';
 import 'package:game_scoreboard/screens/profileScreen.dart';
 
 Future<Null> main() async {
+  // Load build flavor and set environment configurations
+  //
+  // This is needs to run before anything else to ensure
+  // all API paths and tokens are set before sending any requests
   BuildFlavor buildFlavor = env.debug ? BuildFlavor.development : BuildFlavor.production;
   await env.loadEnv(flavor: buildFlavor);
 
@@ -30,11 +34,11 @@ Future<Null> main() async {
     }
   };
 
-  // This creates a [Zone] that contains the Flutter application and stablishes
+  // This creates a [Zone] that contains the Flutter application and establishes
   // an error handler that captures errors and reports them.
   //
   // Using a zone makes sure that as many errors as possible are captured,
-  // including those thrown from [Timer]s, microtasks, I/O, and those forwarded
+  // including those thrown from [Timer]s, micro-tasks, I/O, and those forwarded
   // from the `FlutterError` handler.
   runZoned<Future<Null>>(() async {
     runApp(
@@ -52,6 +56,9 @@ Future<Null> main() async {
   });
 }
 
+/*
+Application: GameScoreboard
+ */
 class GameScoreboard extends StatelessWidget {
   // This widget is the root of your application.
   @override
