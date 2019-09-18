@@ -31,13 +31,13 @@ class BuildEnvironment {
 
   /// Singleton members
   final _envJsonMemoizer = AsyncMemoizer<String>();
-  Map<String, dynamic> _env;
+  Map<String, dynamic> _env = {};
   bool debug;
 
   Future<Map<String, dynamic>> loadEnv({
     @required flavor,
   }) async {
-    if (_env != null) {
+    if (_env.isNotEmpty) {
       return _env;
     }
 

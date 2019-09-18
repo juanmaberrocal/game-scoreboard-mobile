@@ -15,6 +15,9 @@ import 'package:game_scoreboard/screens/dashboardScreen.dart';
 import 'package:game_scoreboard/screens/profileScreen.dart';
 
 Future<Null> main() async {
+  BuildFlavor buildFlavor = env.debug ? BuildFlavor.development : BuildFlavor.production;
+  await env.loadEnv(flavor: buildFlavor);
+
   // This captures errors reported by the Flutter framework.
   FlutterError.onError = (FlutterErrorDetails details) async {
     if (env.debug) {
@@ -34,9 +37,6 @@ Future<Null> main() async {
   // including those thrown from [Timer]s, microtasks, I/O, and those forwarded
   // from the `FlutterError` handler.
   runZoned<Future<Null>>(() async {
-    BuildFlavor buildFlavor = env.debug ? BuildFlavor.development : BuildFlavor.production;
-    await env.loadEnv(flavor: buildFlavor);
-
     runApp(
       MultiProvider(
         providers: [
