@@ -23,7 +23,7 @@ class _GamesScreenState extends State<GamesScreen> {
     return Consumer<GamesLibrary>(
       builder: (context, gamesLibrary, child) {
         final List<Widget> gameCards = gamesLibrary.games.map(
-          (game) => _GameGridElement(game: game)
+                (game) => _GameGridElement(game: game)
         ).toList();
 
         return OrientationBuilder(
@@ -40,7 +40,7 @@ class _GamesScreenState extends State<GamesScreen> {
               ),
               onRefresh: () {
                 return Provider.of<GamesLibrary>(context, listen: false).load();
-              }
+              },
             );
           },
         );
@@ -65,37 +65,37 @@ class _GameGridElement extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => GameScreen(
-                  gameId: game.id,
-                  gameName: game.name,
-                )
+              builder: (context) => GameScreen(
+                gameId: game.id,
+                gameName: game.name,
+              ),
             ),
           );
         },
         child: Column(
-            children: [
-              Center(
-                child: CircleAvatar(
-                  radius: 30,
-                  backgroundColor: ColorSelector().fromString(game.name),
+          children: [
+            Center(
+              child: CircleAvatar(
+                radius: 30,
+                backgroundColor: ColorSelector().fromString(game.name),
+                child: Text(
+                  game.name[0],
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.all(8.0),
+                alignment: Alignment.bottomCenter,
+                child: FittedBox(
                   child: Text(
-                    game.name[0],
+                    game.name,
                   ),
+                  fit: BoxFit.scaleDown,
                 ),
               ),
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.all(8.0),
-                  alignment: Alignment.bottomCenter,
-                  child: FittedBox(
-                    child: Text(
-                      game.name,
-                    ),
-                    fit: BoxFit.scaleDown,
-                  ),
-                ),
-              ),
-            ]
+            ),
+          ],
         ),
       ),
     );
