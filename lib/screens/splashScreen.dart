@@ -8,6 +8,7 @@ import 'package:game_scoreboard/models/appProviders/currentPlayer.dart';
 import 'package:game_scoreboard/models/appProviders/gamesLibrary.dart';
 import 'package:game_scoreboard/models/appProviders/playersLibrary.dart';
 import 'package:game_scoreboard/services/systemServices.dart';
+import 'package:game_scoreboard/widgets/logo.dart';
 
 /*
 Screen: Splash
@@ -95,16 +96,7 @@ class Body extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Container(
-            height: MediaQuery.of(context).size.height / 3.0,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/logo.png'),
-                fit: BoxFit.contain,
-              ),
-            ),
-          ),
+          Logo(heightRatio: 5.0,),
           Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(horizontal: 20.0),

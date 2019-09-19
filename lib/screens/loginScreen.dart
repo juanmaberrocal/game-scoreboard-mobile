@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:game_scoreboard/models/appProviders/currentPlayer.dart';
 import 'package:game_scoreboard/models/appProviders/gamesLibrary.dart';
 import 'package:game_scoreboard/models/appProviders/playersLibrary.dart';
+import 'package:game_scoreboard/widgets/logo.dart';
 
 /*
 Screen: Login
@@ -67,13 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SizedBox(
-                height: 155.0,
-                child: Image.asset(
-                  "assets/images/logo.png",
-                  fit: BoxFit.contain,
-                ),
-              ),
+              Logo(maxHeight: 100.0,),
               Form(
                 key: _loginFormKey,
                 child: Column(
