@@ -52,7 +52,7 @@ class _NameAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String initials = name.split(' ').map((String n) => n[0]).join(' ');
+    final String initials = name.split(' ').map((String n) => n[0]).join('');
     return CircleAvatar(
       radius: radius,
       backgroundColor: ColorSelector().fromString(initials),
