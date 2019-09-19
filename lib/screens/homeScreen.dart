@@ -103,8 +103,6 @@ class _HomeBody extends StatelessWidget {
     final List<Game> games = Provider.of<GamesLibrary>(context, listen: false).games;
 
     final Iterable<Match> matchesWon = matches.records.where((match) => match.winner);
-    final double winPct = matchesWon.length / matches.count();
-
     Map<String, double> gamesPie = {};
     matchesWon.forEach((match) {
       int gameId = match.gameId;
@@ -120,80 +118,20 @@ class _HomeBody extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Expanded(
-              child: Card(
-                child: Container(
-                  height: MediaQuery.of(context).size.width * 0.33,
-                  padding: EdgeInsets.only(right: 5.0),
-                  child: Stack(
-                    children: <Widget>[
-                      Positioned(
-                        child: RotatedBox(
-                          child: Text(
-                            'PLAYED',
-                            style: TextStyle(
-                              fontSize: 30,
-                            ),
-                          ),
-                          quarterTurns: 1,
-                        ),
-                        top: 0.0,
-                        left: -7.0,
-                      ),
-                      Align(
-                        child: Text(
-                          "${matches.count()}",
-                          style: TextStyle(
-                            fontSize: 80,
-                          ),
-                        ),
-                        alignment: Alignment.centerRight,
-                      ),
-                    ],
-                  ),
-                ),
+              child: Container(
+                height: MediaQuery.of(context).size.width * 0.33,
+                padding: EdgeInsets.only(right: 5.0),
+                child: _GamesPlayedCard(matches: matches,),
               ),
             ),
             Container(
               margin: EdgeInsets.only(top: 17.0),
-              child: Card(
-                child: Container(
-                  height: MediaQuery.of(context).size.width * 0.30,
-                  width: MediaQuery.of(context).size.width * 0.50,
-                  padding: EdgeInsets.all(0.0),
-                  child: Stack(
-                    children: <Widget>[
-                      Positioned(
-                        child: Text(
-                          'WIN %',
-                          style: TextStyle(
-                            fontSize: 50,
-                          ),
-                        ),
-                        top: -12.0,
-                        left: 0.0,
-                      ),
-                      Positioned(
-                        child: Text(
-                          "${(winPct * 100).toStringAsFixed(0)}",
-                          style: TextStyle(
-                            color: Colors.green,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 100,
-                            height: 0,
-                          ),
-                        ),
-                        bottom: 0.0,
-                        right: 2.0,
-                      ),
-                    ],
-                  ),
-                ),
-                elevation: 5.0,
-              ),
+              height: MediaQuery.of(context).size.width * 0.35,
+              width: MediaQuery.of(context).size.width * 0.50,
+              child: _GamesWonCard(matches: matches,),
             ),
           ],
         ),
-
         Padding(
           padding: EdgeInsets.symmetric(vertical: 35.0),
           child: Column(
@@ -214,12 +152,106 @@ class _HomeBody extends StatelessWidget {
             ],
           ),
         ),
-
-
         Center(
           child: Text("Recent Games:"),
         ),
       ],
+    );
+  }
+}
+
+class _GamesPlayedCard extends StatelessWidget {
+  _GamesPlayedCard({
+    Key key,
+    this.matches,
+  }) : super(key: key);
+
+  final Matches matches;
+
+  @override
+  Widget build(BuildContext context) {
+    final int gamesPlayed = matches.count();
+
+    return Card(
+      child: Container(
+        height: MediaQuery.of(context).size.width * 0.33,
+        padding: EdgeInsets.only(right: 5.0),
+        child: Stack(
+          children: <Widget>[
+            Positioned(
+              child: RotatedBox(
+                child: Text(
+                  'PLAYED',
+                  style: TextStyle(
+                    fontSize: 30,
+                  ),
+                ),
+                quarterTurns: 1,
+              ),
+              top: 0.0,
+              left: -7.0,
+            ),
+            Align(
+              child: Text(
+                "$gamesPlayed",
+                style: TextStyle(
+                  fontSize: 80,
+                ),
+              ),
+              alignment: Alignment.centerRight,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _GamesWonCard extends StatelessWidget {
+  _GamesWonCard({
+    Key key,
+    this.matches,
+  }) : super(key: key);
+
+  final Matches matches;
+
+  @override
+  Widget build(BuildContext context) {
+    final List<Match> matchesWon = matches.records.where((match) => match.winner).toList();
+    final double winPct = matchesWon.length / matches.count();
+
+    return Card(
+      child: Container(
+        padding: EdgeInsets.all(0.0),
+        child: Stack(
+          children: <Widget>[
+            Positioned(
+              child: Text(
+                'WIN %',
+                style: TextStyle(
+                  fontSize: 50,
+                ),
+              ),
+              top: -12.0,
+              left: 0.0,
+            ),
+            Positioned(
+              child: Text(
+                "${(winPct * 100).toStringAsFixed(0)}",
+                style: TextStyle(
+                  color: Colors.green,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 100,
+                  height: 0,
+                ),
+              ),
+              bottom: 0.0,
+              right: 2.0,
+            ),
+          ],
+        ),
+      ),
+      elevation: 5.0,
     );
   }
 }
