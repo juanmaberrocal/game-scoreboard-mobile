@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 // dependencies
 import 'package:provider/provider.dart';
 // app
-import 'package:game_scoreboard/helpers/colorSelector.dart';
 import 'package:game_scoreboard/models/appProviders/playersLibrary.dart';
 import 'package:game_scoreboard/models/player.dart';
 import 'package:game_scoreboard/screens/playerScreen.dart';
+import 'package:game_scoreboard/widgets/playerAvatar.dart';
 
 /*
 Screen: Players Dashboard
@@ -66,9 +66,9 @@ class _PlayerListElement extends StatelessWidget {
           );
         },
         child: ListTile(
-          leading: CircleAvatar(
-            backgroundColor: ColorSelector().fromString(player.nickname),
-            child: Text("${player.nickname[0]}"),
+          leading: PlayerAvatar(
+            player: player,
+            useName: false,
           ),
           title: Text(player.nickname),
         ),

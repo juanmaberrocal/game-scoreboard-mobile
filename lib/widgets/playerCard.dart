@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 // app
 import 'package:game_scoreboard/helpers/colorSelector.dart';
 import 'package:game_scoreboard/models/player.dart';
+import 'package:game_scoreboard/widgets/playerAvatar.dart';
 
 /*
 Widget: PlayerCard
@@ -107,18 +108,10 @@ class _CardAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String initials = "${player.firstName[0]}${player.lastName[0]}";
-    final String url = player.avatarUrl ?? "";
-
-    return CircleAvatar(
+    return PlayerAvatar(
+      player: player,
+      useName: true,
       radius: radius,
-      backgroundColor: ColorSelector().fromString(player.nickname),
-      child: (
-        player.avatarUrl == null ? Text(initials) : null
-      ),
-      backgroundImage: (
-        player.avatarUrl != null ? NetworkImage(url) : null
-      ),
     );
   }
 }
