@@ -79,6 +79,11 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 }
 
+/*
+Widget: Body
+Builds splash body layout with the app logo and title in the center
+  (expected to take up most available space)
+ */
 class Body extends StatelessWidget {
   Body({
     Key key,
@@ -119,6 +124,11 @@ class Body extends StatelessWidget {
   }
 }
 
+/*
+Widget: Footer
+Display a small footer text
+  (does not contain any logic about where it should be placed)
+ */
 class Footer extends StatelessWidget {
   Footer({
     Key key,
