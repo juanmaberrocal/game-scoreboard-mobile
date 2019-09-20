@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // dependencies
 // app
-import 'package:game_scoreboard/helpers/colorSelector.dart';
 import 'package:game_scoreboard/models/player.dart';
 import 'package:game_scoreboard/widgets/playerAvatar.dart';
 
