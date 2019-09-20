@@ -70,7 +70,12 @@ class _PlayerListElement extends StatelessWidget {
             player: player,
             useName: false,
           ),
-          title: Text(player.nickname),
+          title: Text(
+            player.nickname,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            textAlign: TextAlign.left,
+          ),
         ),
       ),
     );
