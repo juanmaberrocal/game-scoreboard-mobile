@@ -24,7 +24,7 @@ class Player {
   @JsonKey(name: 'last_name')
   final String lastName;
   final String nickname;
-  @JsonKey(fromJson: Role.roleFromString, toJson: Role.roleToString)
+  @JsonKey(fromJson: Role.roleFromString, toJson: Role.roleToString, includeIfNull: false)
   final Role role;
   @JsonKey(name: 'avatar_url')
   final String avatarUrl;

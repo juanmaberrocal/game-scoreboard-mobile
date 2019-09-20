@@ -21,9 +21,13 @@ class Role {
         role = admin;
         break;
       }
+      case 'player': {
+        role = player;
+        break;
+      }
 
       default: {
-        role = player;
+        role = null;
       }
     }
 
@@ -34,14 +38,18 @@ class Role {
   static String _roleToString(Role roleKlass) {
     String role;
 
-    switch(roleKlass.role) {
+    switch(roleKlass?.role) {
       case admin: {
         role = 'admin';
         break;
       }
+      case player: {
+        role = 'player';
+        break;
+      }
 
       default: {
-        role = 'player';
+        role = null;
       }
     }
 

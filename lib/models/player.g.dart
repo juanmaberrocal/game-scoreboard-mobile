@@ -18,12 +18,22 @@ Player _$PlayerFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$PlayerToJson(Player instance) => <String, dynamic>{
-      'id': JsonModel.stringFromInt(instance.id),
-      'email': instance.email,
-      'first_name': instance.firstName,
-      'last_name': instance.lastName,
-      'nickname': instance.nickname,
-      'role': Role.roleToString(instance.role),
-      'avatar_url': instance.avatarUrl,
-    };
+Map<String, dynamic> _$PlayerToJson(Player instance) {
+  final val = <String, dynamic>{
+    'id': JsonModel.stringFromInt(instance.id),
+    'email': instance.email,
+    'first_name': instance.firstName,
+    'last_name': instance.lastName,
+    'nickname': instance.nickname,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('role', Role.roleToString(instance.role));
+  val['avatar_url'] = instance.avatarUrl;
+  return val;
+}
