@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:json_annotation/json_annotation.dart';
 // app
 import 'package:game_scoreboard/models/jsonModel.dart';
+import 'package:game_scoreboard/models/role.dart';
 import 'package:game_scoreboard/services/apiServices.dart';
 
 // serializer
@@ -23,11 +24,14 @@ class Player with JsonModel {
   @JsonKey(name: 'last_name')
   final String lastName;
   final String nickname;
+  @JsonKey(fromJson: Role.roleFromString, toJson: Role.roleToString)
+  final Role role;
   @JsonKey(name: 'avatar_url')
   final String avatarUrl;
 
   Player({
     this.id, this.email, this.firstName, this.lastName, this.nickname,
+    this.role,
     this.avatarUrl,
   });
 

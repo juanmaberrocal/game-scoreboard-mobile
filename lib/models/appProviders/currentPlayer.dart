@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 // app
 import 'package:game_scoreboard/data/storedUser.dart';
 import 'package:game_scoreboard/models/player.dart';
+import 'package:game_scoreboard/models/role.dart';
 import 'package:game_scoreboard/services/authorizationServices.dart';
 
 enum Status { Uninitialized, Authenticated, Authenticating, Unauthenticated }
@@ -49,6 +50,10 @@ class CurrentPlayer with ChangeNotifier {
   void refreshCurrentPlayer(Player _player) {
     player = _player;
     notifyListeners();
+  }
+
+  bool isAdmin() {
+    return player.role.isAdmin();
   }
 
   Future<void> uploadAvatar(
