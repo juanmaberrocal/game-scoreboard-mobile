@@ -37,7 +37,7 @@ class Game {
     this.avatarUrl,
   });
 
-  static String _apiPath = 'v1/games';
+  static const String _apiPath = 'v1/games';
 
   static Future<Game> fetch(int id) async {
     final String url = '$_apiPath/$id';
