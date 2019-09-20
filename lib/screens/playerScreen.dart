@@ -4,7 +4,9 @@ import 'package:provider/provider.dart';
 // dependencies
 // app
 import 'package:game_scoreboard/models/appProviders/currentPlayer.dart';
+import 'package:game_scoreboard/models/appProviders/playersLibrary.dart';
 import 'package:game_scoreboard/models/player.dart';
+import 'package:game_scoreboard/screens/playerEditScreen.dart';
 import 'package:game_scoreboard/widgets/appBlocks.dart';
 import 'package:game_scoreboard/widgets/circleLoader.dart';
 import 'package:game_scoreboard/widgets/errorDisplay.dart';
@@ -28,9 +30,25 @@ class PlayerScreen extends StatefulWidget {
 
 class _PlayerScreenState extends State<PlayerScreen> {
   Future<Player> _player;
+  Future<List> _standings;
 
   void _goToPlayerEdit(Player player) {
-    print("in edit");
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PlayerEditScreen(
+          player: player,
+          successCallback: (Player _updatedPlayer) {
+            _player = Player.fetch(_updatedPlayer.id).then((Player player) {
+              _standings = player.standings();
+              return player;
+            });
+
+            Provider.of<PlayersLibrary>(context, listen: false).load();
+          },
+        ),
+      ),
+    );
   }
 
   void _deletePlayer(Player player) {
@@ -39,7 +57,11 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
   @override
   void initState() {
-    _player = Player.fetch(widget.playerId);
+    _player = Player.fetch(widget.playerId).then((Player player) {
+      _standings = player.standings();
+      return player;
+    });
+
     super.initState();
   }
 
@@ -66,7 +88,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
               children: <Widget>[
                 PlayerCard(player: player),
                 FutureBuilder(
-                  future: player.standings(),
+                  future: _standings,
                   builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
                     if (snapshot.hasData) {
                       final List<dynamic> standingsData = snapshot.data;
