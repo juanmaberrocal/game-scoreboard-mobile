@@ -38,9 +38,9 @@ class Player {
   factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);
   Map<String, dynamic> toJson() => _$PlayerToJson(this);
 
-  final String _apiPath = 'v1/players';
+  static const String _apiPath = 'v1/players';
 
-  Future<Player> fetch(int id) async {
+  static Future<Player> fetch(int id) async {
     final String url = '$_apiPath/$id';
     final response = await api.get(url);
     final JsonModel jsonModel = JsonModel.fromResponse(response);
@@ -82,7 +82,7 @@ class Player {
     return player;
   }
 
-  Future<List<dynamic>> standings(int id) async {
+  Future<List<dynamic>> standings() async {
     final String url = '$_apiPath/$id/standings';
 
     final response = await api.get(url);
