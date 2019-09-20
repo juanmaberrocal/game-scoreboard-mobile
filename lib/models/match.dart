@@ -12,7 +12,7 @@ part 'match.g.dart';
 model: Match
 */
 @JsonSerializable()
-class Match with JsonModel {
+class Match {
   @JsonKey(fromJson: JsonModel.stringToInt, toJson: JsonModel.stringFromInt)
   final int id;
   @JsonKey(name: 'match_id')
@@ -41,12 +41,8 @@ class Match with JsonModel {
         'match': toJson(),
       },
     );
-    final Map<String, dynamic> responseData = parseResponseString(
-      responseString: response.body,
-      responseCode: response.statusCode,
-    );
-
-    final Match match = Match.fromJson(parseResponseDataToRecordData(responseData: responseData));
+    final JsonModel jsonModel = JsonModel.fromResponse(response);
+    final Match match = Match.fromJson(jsonModel.toRecordData());
     return match;
   }
 }

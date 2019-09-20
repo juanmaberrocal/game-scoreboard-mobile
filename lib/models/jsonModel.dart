@@ -1,36 +1,54 @@
 // flutter
 import 'dart:convert';
+
+import 'package:http/http.dart';
 // dependencies
 // app
 
-abstract class JsonModel {
-  // This class is intended to be used as a mixin, and should not be
-  // extended directly.
-  factory JsonModel._() => null;
+class JsonModel {
+  static const List<int> validResponseCodes = [200, 201, 204];
 
-  Map<String, dynamic> parseResponseString({
-    String responseString,
-    int responseCode,
-    List<int> validResponseCodes = const [200, 201, 204]
-  }) {
-    final responseJson = json.decode(responseString);
+  final Map<String, dynamic> data;
+
+  JsonModel({
+    this.data,
+  });
+
+  factory JsonModel.fromResponse(Response response) {
+    final int responseCode = response.statusCode;
+    final String responseString = response.body;
 
     if (validResponseCodes.contains(responseCode)) {
-      final responseData = responseJson['data'];
-      return responseData;
+      return JsonModel.fromString(responseString);
     } else {
-      final responseError = responseJson['error'] ?? 'Oops Something Went Wrong';
-      throw(responseError);
+      return _throwJsonError(responseString);
     }
   }
 
-  Map<String, dynamic> parseResponseDataToRecordData({
-    Map<String, dynamic> responseData,
-  }) {
-    Map<String, dynamic> recordData = {};
-    recordData.addAll({'id': responseData['id']});
-    recordData.addAll(responseData['attributes']);
+  factory JsonModel.fromStream(String responseString, int responseCode) {
+    if (validResponseCodes.contains(responseCode)) {
+      return JsonModel.fromString(responseString);
+    } else {
+      return _throwJsonError(responseString);
+    }
+  }
 
+  factory JsonModel.fromString(String string,) => JsonModel(data: _jsonFromString(string));
+  static _jsonFromString(String string) {
+    final Map<String, dynamic> _json = json.decode(string);
+    return _json.containsKey('data') ? _json['data'] : _json;
+  }
+
+  static _throwJsonError(String string) {
+    final Map<String, dynamic> _json = _jsonFromString(string);
+    final error = _json['error'] ?? 'Oops Something Went Wrong';
+    throw(error);
+  }
+
+  Map<String, dynamic> toRecordData() {
+    Map<String, dynamic> recordData = {};
+    recordData.addAll({'id': data['id']});
+    recordData.addAll(data['attributes']);
     return recordData;
   }
 

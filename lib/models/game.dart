@@ -14,7 +14,7 @@ part 'game.g.dart';
 model: Game
 */
 @JsonSerializable()
-class Game with JsonModel {
+class Game {
   @JsonKey(fromJson: JsonModel.stringToInt, toJson: JsonModel.stringFromInt)
   final int id;
   final String name;
@@ -39,19 +39,15 @@ class Game with JsonModel {
 
   static String _apiPath = 'v1/games';
 
-  Future<Game> fetch(int id) async {
+  static Future<Game> fetch(int id) async {
     final String url = '$_apiPath/$id';
     final response = await api.get(url);
-    final Map<String, dynamic> responseData = parseResponseString(
-      responseString: response.body,
-      responseCode: response.statusCode,
-    );
-
-    final Game game = Game.fromJson(parseResponseDataToRecordData(responseData: responseData));
+    final JsonModel jsonModel = JsonModel.fromResponse(response);
+    final Game game = Game.fromJson(jsonModel.toRecordData());
     return game;
   }
 
-  Future<List<dynamic>> standings(int id) async {
+  Future<List<dynamic>> standings() async {
     final String url = '$_apiPath/$id/standings';
 
     final response = await api.get(url);

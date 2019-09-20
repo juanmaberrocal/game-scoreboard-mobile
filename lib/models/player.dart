@@ -15,7 +15,7 @@ part 'player.g.dart';
 model: Player
 */
 @JsonSerializable()
-class Player with JsonModel {
+class Player {
   @JsonKey(fromJson: JsonModel.stringToInt, toJson: JsonModel.stringFromInt)
   final int id;
   final String email;
@@ -43,12 +43,8 @@ class Player with JsonModel {
   Future<Player> fetch(int id) async {
     final String url = '$_apiPath/$id';
     final response = await api.get(url);
-    final Map<String, dynamic> responseData = parseResponseString(
-      responseString: response.body,
-      responseCode: response.statusCode,
-    );
-
-    final Player player = Player.fromJson(parseResponseDataToRecordData(responseData: responseData));
+    final JsonModel jsonModel = JsonModel.fromResponse(response);
+    final Player player = Player.fromJson(jsonModel.toRecordData());
     return player;
   }
 
@@ -60,12 +56,8 @@ class Player with JsonModel {
         'player': toJson(),
       },
     );
-    final Map<String, dynamic> responseData = parseResponseString(
-      responseString: response.body,
-      responseCode: response.statusCode,
-    );
-
-    final Player player = Player.fromJson(parseResponseDataToRecordData(responseData: responseData));
+    final JsonModel jsonModel = JsonModel.fromResponse(response);
+    final Player player = Player.fromJson(jsonModel.toRecordData());
     return player;
   }
 
@@ -85,12 +77,8 @@ class Player with JsonModel {
       apiRequest: 'PUT',
     );
     final String responseString = await response.stream.bytesToString();
-    final Map<String, dynamic> responseData = parseResponseString(
-      responseString: responseString,
-      responseCode: response.statusCode,
-    );
-
-    final Player player = Player.fromJson(parseResponseDataToRecordData(responseData: responseData));
+    final JsonModel jsonModel = JsonModel.fromStream(responseString, response.statusCode);
+    final Player player = Player.fromJson(jsonModel.toRecordData());
     return player;
   }
 
@@ -98,11 +86,7 @@ class Player with JsonModel {
     final String url = '$_apiPath/$id/standings';
 
     final response = await api.get(url);
-    final Map<String, dynamic> responseData = parseResponseString(
-      responseString: response.body,
-      responseCode: response.statusCode,
-    );
-
-    return responseData['attributes']['standings'];
+    final JsonModel jsonModel = JsonModel.fromResponse(response);
+    return jsonModel.data['attributes']['standings'];
   }
 }
