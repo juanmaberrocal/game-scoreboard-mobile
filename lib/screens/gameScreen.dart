@@ -30,6 +30,7 @@ class GameScreen extends StatefulWidget {
 
 class _GameScreenState extends State<GameScreen> {
   Future<Game> _game;
+  Future<List> _standings;
 
   void _changeAvatar(Game game) {
     print("inasdg");
@@ -45,7 +46,11 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   void initState() {
-    _game = Game.fetch(widget.gameId);
+    _game = Game.fetch(widget.gameId).then((Game game) {
+      _standings = game.standings();
+      return game;
+    });
+
     super.initState();
   }
 
@@ -73,7 +78,7 @@ class _GameScreenState extends State<GameScreen> {
               children: <Widget>[
                 _GameBody(game: game),
                 FutureBuilder(
-                  future: game.standings(),
+                  future: _standings,
                   builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
                     if (snapshot.hasData) {
                       final List<dynamic> standingsData = snapshot.data;
