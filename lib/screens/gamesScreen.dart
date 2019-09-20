@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 // dependencies
 import 'package:provider/provider.dart';
 // app
-import 'package:game_scoreboard/helpers/colorSelector.dart';
+import 'package:game_scoreboard/helpers/device.dart';
 import 'package:game_scoreboard/models/appProviders/gamesLibrary.dart';
 import 'package:game_scoreboard/models/game.dart';
 import 'package:game_scoreboard/screens/gameScreen.dart';
+import 'package:game_scoreboard/widgets/gameAvatar.dart';
+
 
 /*
 Screen: Games Dashboard
@@ -18,30 +20,54 @@ class GamesScreen extends StatefulWidget {
 }
 
 class _GamesScreenState extends State<GamesScreen> {
+  int _gridCount(MediaSize mediaSize) {
+    int count;
+
+    switch(mediaSize) {
+      case MediaSize.xs: {
+        count = 2;
+        break;
+      }
+
+      case MediaSize.s: {
+        count = 3;
+        break;
+      }
+
+      case MediaSize.m:
+      case MediaSize.l: {
+        count = 5;
+        break;
+      }
+
+      case MediaSize.xl: {
+        count = 1;
+        break;
+      }
+    }
+
+    return count;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final device = Device.get(context);
+
     return Consumer<GamesLibrary>(
       builder: (context, gamesLibrary, child) {
-        final List<Widget> gameCards = gamesLibrary.games.map(
-                (game) => _GameGridElement(game: game)
-        ).toList();
+        final List<Widget> gameCards = gamesLibrary.games.map((game) => _GameGridElement(game: game)).toList();
 
-        return OrientationBuilder(
-          builder: (context, orientation) {
-            return RefreshIndicator(
-              child: GridView.count(
-                physics: const AlwaysScrollableScrollPhysics(),
-                primary: false,
-                padding: const EdgeInsets.all(20.0),
-                mainAxisSpacing: 20.0,
-                crossAxisSpacing: 10.0,
-                crossAxisCount: orientation == Orientation.portrait ? 3 : 5,
-                children: gameCards,
-              ),
-              onRefresh: () {
-                return Provider.of<GamesLibrary>(context, listen: false).load();
-              },
-            );
+        return RefreshIndicator(
+          child: GridView.count(
+            physics: AlwaysScrollableScrollPhysics(),
+            padding: EdgeInsets.all(20.0),
+            mainAxisSpacing: 10.0,
+            crossAxisSpacing: 10.0,
+            crossAxisCount: _gridCount(device.mediaSize),
+            children: gameCards,
+          ),
+          onRefresh: () {
+            return Provider.of<GamesLibrary>(context, listen: false).load();
           },
         );
       },
@@ -73,28 +99,24 @@ class _GameGridElement extends StatelessWidget {
           );
         },
         child: Column(
-          children: [
-            Center(
-              child: CircleAvatar(
-                radius: 30,
-                backgroundColor: ColorSelector().fromString(game.name),
-                child: Text(
-                  game.name[0],
-                ),
-              ),
+          children: <Widget>[
+            Expanded(
+              flex: 3,
+              child: GameAvatar(game: game),
             ),
             Expanded(
+              flex: 1,
               child: Container(
                 padding: EdgeInsets.all(8.0),
-                alignment: Alignment.bottomCenter,
-                child: FittedBox(
-                  child: Text(
-                    game.name,
-                  ),
-                  fit: BoxFit.scaleDown,
+                alignment: Alignment.center,
+                child: Text(
+                  game.name,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  textAlign: TextAlign.center,
                 ),
               ),
-            ),
+            )
           ],
         ),
       ),

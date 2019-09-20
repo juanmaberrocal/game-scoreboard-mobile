@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:game_scoreboard/models/game.dart';
 import 'package:game_scoreboard/widgets/circleLoader.dart';
 import 'package:game_scoreboard/widgets/errorDisplay.dart';
+import 'package:game_scoreboard/widgets/gameAvatar.dart';
 import 'package:game_scoreboard/widgets/standingList.dart';
 
 /*
@@ -96,15 +97,9 @@ class _GameBody extends StatelessWidget {
     return Card(
       child: Column(
         children: <Widget>[
-          Container(
-            height: MediaQuery.of(context).size.height / 3.0,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/Missing-image-232x150.png'),
-                fit: BoxFit.fill,
-              ),
-            ),
+          GameAvatar(
+            game: game,
+            height: MediaQuery.of(context).size.height / 4.0,
           ),
           Container(
             margin: EdgeInsets.all(30),
