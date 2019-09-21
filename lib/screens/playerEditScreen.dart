@@ -98,7 +98,7 @@ class _PlayerEditScreenState extends State<PlayerEditScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.pageTitle ?? widget.player.nickname),
+        title: Text(widget.pageTitle ?? "Edit ${widget.player.nickname}"),
         automaticallyImplyLeading: false,
       ),
       bottomNavigationBar: BottomNavigationBar(
