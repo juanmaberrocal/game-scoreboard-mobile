@@ -55,7 +55,9 @@ class _GamesScreenState extends State<GamesScreen> {
 
     return Consumer<GamesLibrary>(
       builder: (context, gamesLibrary, child) {
-        final List<Widget> gameCards = gamesLibrary.games.map((game) => _GameGridElement(game: game)).toList();
+        final List<Widget> gameCards = gamesLibrary.games.map(
+                (game) => _GameGridElement(game: game,)
+        ).toList()..sort((a, b) => a.game.name.compareTo(b.game.name));
 
         return RefreshIndicator(
           child: GridView.count(

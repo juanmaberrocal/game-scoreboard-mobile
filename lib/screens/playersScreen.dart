@@ -23,8 +23,8 @@ class _PlayersScreenState extends State<PlayersScreen> {
     return Consumer<PlayersLibrary>(
       builder: (context, playersLibrary, child) {
         final List<Widget> playerCards = playersLibrary.players.map(
-          (player) => _PlayerListElement(player: player,)
-        ).toList();
+                (player) => _PlayerListElement(player: player,)
+        ).toList()..sort((a, b) => a.player.nickname.compareTo(b.player.nickname));
 
         return RefreshIndicator(
           child: ListView(
