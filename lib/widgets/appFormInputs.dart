@@ -8,18 +8,22 @@ class VerticalInput extends StatelessWidget {
     Key key,
     @required this.controller,
     @required this.label,
-    this.align = TextAlign.center,
+    this.inputType = TextInputType.text,
+    this.align = TextAlign.left,
     this.isEnabled = true,
     this.isRequired = false,
+    this.multiLine = false,
     this.autoValidate = false,
     this.validator,
   }) : super(key: key);
 
   final TextEditingController controller;
   final String label;
+  final TextInputType inputType;
   final TextAlign align;
   final bool isEnabled;
   final bool isRequired;
+  final bool multiLine;
   final bool autoValidate;
   final Function validator;
 
@@ -28,7 +32,7 @@ class VerticalInput extends StatelessWidget {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
-        labelText: "$label${isRequired ? " *" : ""}",
+        labelText: "$label${isRequired ? "*" : ""}",
         enabled: isEnabled,
       ),
       style: TextStyle(
@@ -40,6 +44,8 @@ class VerticalInput extends StatelessWidget {
       ),
       textAlign: align,
       enabled: isEnabled,
+      keyboardType: multiLine ? TextInputType.multiline : inputType,
+      maxLines: multiLine ? null : 1,
       autovalidate: autoValidate,
       validator: (
           validator != null ?
@@ -56,18 +62,22 @@ class HorizontalInput extends StatefulWidget {
     Key key,
     @required this.controller,
     @required this.label,
-    this.align = TextAlign.center,
+    this.inputType = TextInputType.text,
+    this.align = TextAlign.left,
     this.isEnabled = true,
     this.isRequired = false,
+    this.multiLine = false,
     this.autoValidate = false,
     this.validator,
   }) : super(key: key);
 
   final TextEditingController controller;
   final String label;
+  final TextInputType inputType;
   final TextAlign align;
   final bool isEnabled;
   final bool isRequired;
+  final bool multiLine;
   final bool autoValidate;
   final Function validator;
 
@@ -103,7 +113,7 @@ class _HorizontalInputState extends State<HorizontalInput> {
       focusNode: _focusNode,
       decoration: InputDecoration(
         enabled: widget.isEnabled,
-        prefixText: "${widget.label}${widget.isRequired ? " *" : ""}",
+        prefixText: "${widget.label}${widget.isRequired ? "*" : ""}     ",
         prefixStyle: TextStyle(
           color: (
               widget.isEnabled ?
@@ -125,6 +135,8 @@ class _HorizontalInputState extends State<HorizontalInput> {
       ),
       textAlign: widget.align,
       enabled: widget.isEnabled,
+      keyboardType: widget.multiLine ? TextInputType.multiline : widget.inputType,
+      maxLines: widget.multiLine ? null : 1,
       autovalidate: widget.autoValidate,
       validator: (
           widget.validator != null ?

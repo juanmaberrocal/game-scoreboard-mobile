@@ -69,6 +69,7 @@ class _NameInput extends StatelessWidget {
     return VerticalInput(
       controller: controller,
       label: 'Name',
+      align: TextAlign.center,
       isRequired: true,
       autoValidate: autoValidate,
       validator: (String value) {
@@ -102,6 +103,7 @@ class _EmailInput extends StatelessWidget {
     return VerticalInput(
       controller: controller,
       label: 'Email',
+      align: TextAlign.center,
       isEnabled: false,
       isRequired: true,
       autoValidate: autoValidate,

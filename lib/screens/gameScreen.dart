@@ -4,7 +4,9 @@ import 'package:provider/provider.dart';
 // dependencies
 // app
 import 'package:game_scoreboard/models/appProviders/currentPlayer.dart';
+import 'package:game_scoreboard/models/appProviders/gamesLibrary.dart';
 import 'package:game_scoreboard/models/game.dart';
+import 'package:game_scoreboard/screens/gameEditScreen.dart';
 import 'package:game_scoreboard/widgets/appBlocks.dart';
 import 'package:game_scoreboard/widgets/circleLoader.dart';
 import 'package:game_scoreboard/widgets/errorDisplay.dart';
@@ -29,6 +31,10 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
+  // Profile scaffold identifier key
+  final _profileScaffoldKey = GlobalKey<ScaffoldState>();
+
+  // loaders
   Future<Game> _game;
   Future<List> _standings;
 
@@ -37,7 +43,22 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void _goToGameEdit(Game game) {
-    print("in edit");
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => GameEditScreen(
+          game: game,
+          successCallback: (Game _updatedGame) {
+            _game = Game.fetch(_updatedGame.id).then((Game game) {
+              _standings = game.standings();
+              return game;
+            });
+
+            Provider.of<GamesLibrary>(context, listen: false).load();
+          },
+        ),
+      ),
+    );
   }
 
   void _deleteGame(Game game) {
@@ -67,6 +88,7 @@ class _GameScreenState extends State<GameScreen> {
           final Game game = snapshot.data;
 
           return AppScaffold(
+            key: _profileScaffoldKey,
             top: appBar,
             bottom: Provider.of<CurrentPlayer>(context, listen: false).isAdmin() ? AppEditBar(
               record: game,
@@ -101,6 +123,7 @@ class _GameScreenState extends State<GameScreen> {
           );
         } else if (snapshot.hasError) {
           return AppScaffold(
+            key: _profileScaffoldKey,
             top: appBar,
             center: ErrorDisplay(
               errorMessage: 'Could not load game data',
@@ -109,6 +132,7 @@ class _GameScreenState extends State<GameScreen> {
         }
 
         return AppScaffold(
+          key: _profileScaffoldKey,
           top: appBar,
           center: CircleLoader(),
         );
