@@ -1,6 +1,6 @@
 // flutter
 import 'dart:async';
-import 'dart:convert';
+import 'dart:io';
 // dependencies
 import 'package:json_annotation/json_annotation.dart';
 // app
@@ -47,14 +47,46 @@ class Game {
     return game;
   }
 
+  Future<Game> update() async {
+    final String url = "$_apiPath/$id";
+    final response = await api.put(
+      url,
+      apiBody: {
+        'game': toJson(),
+      },
+    );
+    final JsonModel jsonModel = JsonModel.fromResponse(response);
+    final Game game = Game.fromJson(jsonModel.toRecordData());
+    return game;
+  }
+
+  Future<Game> upload(
+      {
+        String param,
+        File file,
+      }
+      ) async {
+    final String url = "$_apiPath/$id";
+    final response = await api.upload(
+      url,
+      apiFile: {
+        'param': "game[$param]",
+        'file': file,
+      },
+      apiRequest: 'PUT',
+    );
+    final String responseString = await response.stream.bytesToString();
+    final JsonModel jsonModel = JsonModel.fromStream(responseString, response.statusCode);
+    final Game game = Game.fromJson(jsonModel.toRecordData());
+    return game;
+  }
+
   Future<List<dynamic>> standings() async {
     final String url = '$_apiPath/$id/standings';
 
     final response = await api.get(url);
-    final responseJson = json.decode(response.body);
-    final responseData = responseJson['data'];
-
-    return responseData['attributes']['standings'];
+    final JsonModel jsonModel = JsonModel.fromResponse(response);
+    return jsonModel.data['attributes']['standings'];
   }
 
   factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);
