@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 // dependencies
 import 'package:provider/provider.dart';
-import 'package:image_picker/image_picker.dart';
 // app
+import 'package:game_scoreboard/helpers/gsSnackBar.dart';
 import 'package:game_scoreboard/models/appProviders/currentPlayer.dart';
 import 'package:game_scoreboard/models/player.dart';
 import 'package:game_scoreboard/screens/playerEditScreen.dart';
+import 'package:game_scoreboard/widgets/avatarUpload.dart';
 import 'package:game_scoreboard/widgets/playerCard.dart';
-import 'package:game_scoreboard/helpers/gsSnackBar.dart';
 
 /*
 Screen: Profile
@@ -28,24 +28,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return _ChangeAvatarDialog(
+        return AvatarUpload(
+          uploadFunction: Provider.of<CurrentPlayer>(context, listen: false).uploadAvatar,
           screenContext: context,
           screenScaffold: _profileScaffoldKey,
         );
-      }
-    );
-  }
-
-  Future<void> _openChangePassword() {
-    return showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return _ChangePasswordDialog(
-          screenContext: context,
-          screenScaffold: _profileScaffoldKey,
-        );
-      }
+      },
     );
   }
 
@@ -61,6 +49,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
         ),
       ),
+    );
+  }
+
+  Future<void> _openChangePassword() {
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return _ChangePasswordDialog(
+          screenContext: context,
+          screenScaffold: _profileScaffoldKey,
+        );
+      }
     );
   }
 
@@ -118,61 +119,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ); 
       },
-    );
-  }
-}
-
-class _ChangeAvatarDialog extends StatelessWidget {
-  _ChangeAvatarDialog({
-    Key key,
-    this.screenContext,
-    this.screenScaffold,
-  }) : super(key: key);
-
-  final BuildContext screenContext;
-  final GlobalKey<ScaffoldState> screenScaffold;
-
-  void _uploadAvatar(image) {
-    // ensure user didn't cancel out
-    if (image != null) {
-      Navigator.pop(screenContext);
-      Provider.of<CurrentPlayer>(screenContext, listen: false).uploadAvatar(
-        file: image,
-      ).then((_) {
-        GSSnackBar(screenScaffold: screenScaffold.currentState)
-          ..success('Avatar updated!',);
-      }).catchError((error) {
-        GSSnackBar(screenScaffold: screenScaffold.currentState)
-          ..error('There was an error updating your avatar!',);
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text('Upload Avatar'),
-      content: SingleChildScrollView(
-        child: ListBody(
-          children: <Widget>[
-            GestureDetector(
-              child: Text('Take a Picture'),
-              onTap: () async {
-                var image = await ImagePicker.pickImage(source: ImageSource.camera);
-                _uploadAvatar(image);
-              },
-            ),
-            Padding(padding: EdgeInsets.all(8.0)),
-            GestureDetector(
-              child: Text('Select from Gallery'),
-              onTap: () async {
-                var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-                _uploadAvatar(image);
-              },
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

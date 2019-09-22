@@ -8,6 +8,7 @@ import 'package:game_scoreboard/models/appProviders/gamesLibrary.dart';
 import 'package:game_scoreboard/models/game.dart';
 import 'package:game_scoreboard/screens/gameEditScreen.dart';
 import 'package:game_scoreboard/widgets/appBlocks.dart';
+import 'package:game_scoreboard/widgets/avatarUpload.dart';
 import 'package:game_scoreboard/widgets/circleLoader.dart';
 import 'package:game_scoreboard/widgets/errorDisplay.dart';
 import 'package:game_scoreboard/widgets/gameAvatar.dart';
@@ -32,14 +33,24 @@ class GameScreen extends StatefulWidget {
 
 class _GameScreenState extends State<GameScreen> {
   // Profile scaffold identifier key
-  final _profileScaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _gameScaffoldKey = GlobalKey<ScaffoldState>();
 
   // loaders
   Future<Game> _game;
   Future<List> _standings;
 
-  void _changeAvatar(Game game) {
-    print("inasdg");
+  Future<void> _changeAvatar(Game game) {
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AvatarUpload(
+          uploadFunction: Game(id: widget.gameId).upload,
+          screenContext: context,
+          screenScaffold: _gameScaffoldKey,
+        );
+      },
+    );
   }
 
   void _goToGameEdit(Game game) {
@@ -88,7 +99,7 @@ class _GameScreenState extends State<GameScreen> {
           final Game game = snapshot.data;
 
           return AppScaffold(
-            key: _profileScaffoldKey,
+            key: _gameScaffoldKey,
             top: appBar,
             bottom: Provider.of<CurrentPlayer>(context, listen: false).isAdmin() ? AppEditBar(
               record: game,
@@ -123,7 +134,7 @@ class _GameScreenState extends State<GameScreen> {
           );
         } else if (snapshot.hasError) {
           return AppScaffold(
-            key: _profileScaffoldKey,
+            key: _gameScaffoldKey,
             top: appBar,
             center: ErrorDisplay(
               errorMessage: 'Could not load game data',
@@ -132,7 +143,7 @@ class _GameScreenState extends State<GameScreen> {
         }
 
         return AppScaffold(
-          key: _profileScaffoldKey,
+          key: _gameScaffoldKey,
           top: appBar,
           center: CircleLoader(),
         );
