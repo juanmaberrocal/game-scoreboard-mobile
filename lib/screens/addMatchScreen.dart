@@ -150,6 +150,30 @@ class _AddMatchScreenState extends State<AddMatchScreen> {
                   },
                   isExpanded: true,
                 ),
+                Container(
+                  width: double.infinity,
+                  margin: EdgeInsets.only(top: 15.0, bottom: 10.0,),
+                  child: Text(
+                    'Match Results',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Text('+/-', textAlign: TextAlign.center,),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Text('Player'),
+                    ),
+                    Expanded(
+                      child: Text('Winner', textAlign: TextAlign.center,),
+                    ),
+                  ],
+                ),
                 ListBody(
                   children: playerSelects,
                 ),
@@ -255,6 +279,7 @@ class _PlayerSelectState extends State<PlayerSelect> {
         Expanded(
           child: Switch(
             value: _winner,
+            activeColor: Colors.green,
             onChanged: _selectedPlayer == null ? null : (bool winner) {
               final _AddMatchScreenState state = AddMatchScreen.of(context);
 
