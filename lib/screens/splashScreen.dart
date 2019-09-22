@@ -19,7 +19,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final int retryDuration = 2;
+  final int retryDuration = 3;
   final int retryLimit = 5;
   int retryCount = 0;
 
